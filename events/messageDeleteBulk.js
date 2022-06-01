@@ -11,8 +11,8 @@ module.exports = {
             .setColor('#ed1c24')
             .setDescription(`${messages.size} messages have been deleted.`)
             .setTimestamp()
-            .setFooter(`${client.user.username}`, client.user.avatarURL());
-            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+            if (embed.description)
+                client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         } else {
             return
         }

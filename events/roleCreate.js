@@ -11,7 +11,7 @@ module.exports = {
         .setAuthor(role.client.user.tag, role.client.user.displayAvatarURL())
         .setDescription(`Role **${role.name}** was created`)
         .setTimestamp()
-        .setFooter(`ID: ${role.client.user.id}`)
-        client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        if (embed.description)
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }

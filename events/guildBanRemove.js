@@ -10,8 +10,8 @@ module.exports = {
         .setColor('#ffdf00')
         .setThumbnail(ban.user.displayAvatarURL())
         .setTimestamp()
-        .setFooter(`ID: ${ban.user.id}`)
         .setDescription(`<@${ban.user.id}> has been unbanned from the server.`)
-        client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        if (embed.description)
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }

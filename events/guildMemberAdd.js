@@ -9,9 +9,9 @@ module.exports = {
         .setTitle(`New Member ${member.user.username}`)
         .setColor('#5ac18e')
         .setThumbnail(member.user.displayAvatarURL())
-        .setDescription(`<@${member.user.id}> has joined the server!`)
+        .setDescription(`<@!${member.user.id}> has joined the server!\n\u200b**Nombre total de membre:** ${member.guild.memberCount}`)
         .setTimestamp()
-        .setFooter(`ID: ${member.user.id}`)
-        client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        if (embed.description)
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }

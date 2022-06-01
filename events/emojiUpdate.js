@@ -11,7 +11,8 @@ module.exports = {
             .setDescription(`${oldEmoji.name} has been updated to ${newEmoji.name}`)
             .setColor('#ffdf00')
             .setTimestamp()
-            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+            if (embed.description)
+                client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         }
     }
 }

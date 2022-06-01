@@ -12,8 +12,8 @@ module.exports = {
                 .setDescription(`${message.content}`)
                 .setColor('#ed1c24')
                 .setTimestamp()
-                .setFooter(`ID: ${message.author.id}`);
-                client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+                if (embed.description)
+                    client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         } else {
             return 
         }

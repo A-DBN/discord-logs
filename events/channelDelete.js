@@ -11,7 +11,7 @@ module.exports = {
         .setThumbnail(channel.client.user.avatarURL())
         .setDescription(`Channel **${channel.name}** was deleted`)
         .setTimestamp()
-        .setFooter({text:`ID: ${channel.client.user.id}`});
-        client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        if (embed.description)
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }

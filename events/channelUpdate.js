@@ -12,8 +12,8 @@ module.exports = {
             .setThumbnail(newChannel.client.user.avatarURL())
             .setDescription(`Channel **${oldChannel.name}** has been updated to **${newChannel.name}** `)
             .setTimestamp()
-            .setFooter(`ID: ${newChannel.client.user.id}`);
-            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+            if (embed.description)
+                client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         }
     }
 }

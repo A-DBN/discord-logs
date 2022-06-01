@@ -10,11 +10,11 @@ module.exports = {
         .setColor('#ed1c24')
         .setThumbnail(ban.user.displayAvatarURL())
         .setTimestamp()
-        .setFooter(`ID: ${ban.user.id}`)
         if (ban.reason)
             embed.setDescription(`<@${ban.user.id}> has been banned from the server.\n\nReason: ${ban.reason}`)
         else 
             embed.setDescription(`<@${ban.user.id}> has been banned from the server*.`)
-        client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        if (embed.description)
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }

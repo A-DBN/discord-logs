@@ -12,8 +12,8 @@ module.exports = {
             .setAuthor(newRole.client.user.tag, newRole.client.user.displayAvatarURL())
             .setDescription(`Role **${oldRole.name}** was updated to **${newRole.name}**`)
             .setTimestamp()
-            .setFooter({text:`ID: ${newRole.client.user.id}`})
-            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+            if (embed.description)
+                client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         } else {
             return
         }

@@ -12,8 +12,8 @@ module.exports = {
             .setColor('#ffdf00')
             .setDescription(`${oldMessage.author} updated a message in ${oldMessage.channel}\n\n**Before**\n${oldMessage.content}\n\n**After**\n${newMessage.content}`)	
             .setTimestamp()
-            .setFooter({text:`ID: ${newMessage.author.id}`});
-            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+            if (embed.description)
+                client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         } else { 
             return
         }

@@ -5,14 +5,13 @@ module.exports = {
     name: "inviteCreate",
     on: true,
     execute(invite) {
-        console.log(invite)
         const embed = new MessageEmbed()
         .setTitle("Invite Created")
         .setColor("#5ac18e")
-        .setAuthor({name: inviter.inviter.tag, iconURL:invite.inviter.displayAvatarURL()})
-        .setDescription(`**Invite**: ${invite.code}\n**Channel**: ${invite.channel.name}\n**Guild**: ${invite.guild.name}`)
+        .setAuthor({name: invite.inviter.username + "#" + invite.inviter.discriminator, iconURL:"https://cdn.discordapp.com/avatars/" + invite.inviter.id + "/" + invite.inviter.avatar})
+        .setDescription(`**Invite**: ${invite.code}\n**Channel**: <#${invite.channel.id}>\n**Guild**: ${invite.guild.name}`)
         .setTimestamp()
-        .setFooter({text: `ID: ${invite.guild.id}`})
-        client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        if (embed.description)
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }
