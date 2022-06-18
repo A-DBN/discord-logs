@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "reergerg": "node deploy-commands.js && nodemon",
+    "starts": "node deploy-commands.js && nodemon --ignore commands/*.js",
     "start": "nodemon main.js"
   },
   "author": "Antoine Dabin",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.8.2",
     "@discordjs/rest": "^0.4.1",
+    "child_process": "^1.0.2",
     "discord-api-types": "^0.33.0",
     "discord.js": "^13.7.0",
     "dotenv": "^8.2.0",

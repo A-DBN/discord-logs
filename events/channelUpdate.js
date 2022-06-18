@@ -9,7 +9,6 @@ module.exports = {
             const embed = new MessageEmbed()
             .setTitle("Channel Update")
             .setColor("#ffdf00")
-            .setThumbnail(newChannel.client.user.avatarURL())
             .setDescription(`Channel **${oldChannel.name}** has been updated to **${newChannel.name}** `)
             .setTimestamp()
             if (embed.description)

@@ -8,7 +8,6 @@ module.exports = {
         const embed = new MessageEmbed()
         .setTitle('Channel Deleted')
         .setColor('#ed1c24')
-        .setThumbnail(channel.client.user.avatarURL())
         .setDescription(`Channel **${channel.name}** was deleted`)
         .setTimestamp()
         if (embed.description)

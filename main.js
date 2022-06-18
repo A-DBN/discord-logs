@@ -4,6 +4,8 @@ global.client = client
 const env = require('dotenv').config()
 const fs = require('fs')
 
+require('./deploy-commands.js')
+
 client.commands = new Collection()
 
 const eventFiles = fs.readdirSync("./events/").filter(file => file.endsWith(".js"));
