@@ -31,7 +31,7 @@ function runScript(scriptPath, callback) {
 module.exports = {
     data: new SlashCommandBuilder()
             .setName('createcommand')
-            .setDescription('Create a new comma')
+            .setDescription('Create a new command')
             .addStringOption(option => option.setName('type').setRequired(true).setDescription('The option to create (Target/Message)'))
             .addStringOption(option => option.setName('name').setRequired(true).setDescription('Command name'))
             .addStringOption(option => option.setName('description').setRequired(true).setDescription('Command description'))
