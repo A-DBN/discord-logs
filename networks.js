@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const { IgApiClient } = require('instagram-private-api');
 const fs = require('fs');
 const axios = require('axios')
+const env = require('dotenv').config()
 
 const idsFilePath = './Stockage/ids.json';
 
@@ -177,11 +178,11 @@ async function updateInstagramInfo() {
 
 async function updateTwitterInfo() {
     const twitterClient = new Twitter({
-        consumer_key: "WO3kzK6EZXFIfScc9UgIu3HE9",
-        consumer_secret: "3BD55u93UNpceO25CqDSjFg7L2Kzi4RV0PwXDoNr1hUnMSNoKs",
-        bearer_token: "AAAAAAAAAAAAAAAAAAAAAEmomgEAAAAAKM6nsmDzuesevN5x%2B3w3kdsjnjw%3Dl1jF7LsdCuYQieM6iFdOp8gQaAQGNBV3DMdEYMLSug2REB8syv",
-        access_token_key: "3365954087-XNnsjoL6Qjz6jhaM9wTfjH7dJWlpf8ID165vf7U",
-        access_token_secret: "hcQoxfiXJ8RAsxfTJmEJl6rqQus4C3aX7bSHHYCC2Q8Rh"
+        consumer_key: process.env.TWITTER_CONSUMER_KEY,
+        consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+        bearer_token: process.env.TWITTER_BEARER_TOKEN,
+        access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+        access_token_secret: process.env.TWITTER_ACCESS_SECRET_TOKEN
     })
     
 
