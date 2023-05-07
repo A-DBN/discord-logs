@@ -3,6 +3,9 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 global.client = client
 const env = require('dotenv').config()
 const fs = require('fs')
+const cron = require('node-cron');
+
+const {updateTwitterInfo, updateInstagramInfo, updateTwitchInfo } = require('./networks.js')
 
 require('./deploy-commands.js')
 
@@ -37,5 +40,11 @@ client.on('interactionCreate', async interaction => {
         return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
     }
 })
+
+cron.schedule('0 0 * * *', () => {
+    updateTwitterInfo()
+    updateInstagramInfo()
+    updateTwitchInfo()
+});
 
 client.login(process.env.token);

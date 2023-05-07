@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "starts": "node deploy-commands.js && nodemon --ignore commands/*.js",
-    "start": "nodemon main.js"
+    "starts": "node deploy-commands.js && nodemon --ignore 'Stockage/ids.json'",
+    "start": "nodemon main.js --ignore Stockage/ids.json"
   },
   "author": "Antoine Dabin",
   "license": "ISC",
@@ -19,9 +19,12 @@
     "discord.js": "^13.7.0",
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
+    "instagram-private-api": "^1.45.3",
     "lodash": "^4.17.21",
+    "node-cron": "^3.0.2",
     "nodemon": "^2.0.16",
     "r2": "^2.0.1",
-    "twitter": "^1.7.1"
+    "twitter": "^1.7.1",
+    "twitter-lite": "^1.1.0"
   }
 }

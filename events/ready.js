@@ -1,11 +1,16 @@
 const {MessageEmbed} = require("discord.js");
 const env = require ('dotenv').config()
+const { updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo } = require('../networks.js')
 
 module.exports = {
     name: 'ready',
     once: true,
     async execute(client) {
         console.log(`Ready to work ! Logged in as ${client.user.tag}`)
+        updateInstagramInfo()
+        updateTwitchInfo()
+        updateTwitterInfo()
+        // updateTikTokInfo()
 	const embed = new MessageEmbed()
         .setTitle('Redemarrage du bot')
         .setColor('#5ac18e')
@@ -13,6 +18,7 @@ module.exports = {
         .setTimestamp()
         if (embed.description)
             client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+            return
 
     }
 }
