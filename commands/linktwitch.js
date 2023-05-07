@@ -9,7 +9,7 @@ module.exports = {
     .setDescription('Give you the follower role if you follow Casca on Twitch')
     .addStringOption(option => option.setName('name').setRequired(true).setDescription('Twitch Name')),
   execute: async (interaction) => {
-    const followerRoleId = '1104679332170969089';
+    const followerRoleId = '1104681838997422080';
     const member = interaction.member;
     const twitchUsername = interaction.options.getString('name');
 

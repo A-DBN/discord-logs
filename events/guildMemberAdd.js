@@ -7,7 +7,7 @@ module.exports = {
     on: true,
     async execute(member) {
         const twitchUsername = member.user.username; // assume that the user's Discord username is the same as their Twitch username
-        const followerRoleId = '1104679332170969089'; // your follower role ID
+        const followerRoleId = '1104681838997422080'; // your follower role ID
     
         const regex = /^[a-zA-Z0-9]+$/;
         if (!regex.test(twitchUsername)) console.log(`User ${twitchUsername} does not match the regex.`)
