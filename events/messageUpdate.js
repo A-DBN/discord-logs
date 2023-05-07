@@ -1,11 +1,12 @@
 const {MessageEmbed} = require("discord.js");
 const env = require ('dotenv').config()
+const _ = require('lodash')
 
 module.exports = {
     name: 'messageUpdate',
     on: true,
     execute(oldMessage, newMessage) {
-        if (oldMessage.channel.id !== process.env.log_channel_id && !oldMessage.author.bot) {
+        if (oldMessage.channel.id !== process.env.log_channel_id && !oldMessage.author.bot && oldMessage.content !== newMessage.content) {
             const embed = new MessageEmbed()
             .setTitle(`Message Updated in #${newMessage.channel.name}`)
             .setAuthor({name: newMessage.author.tag, iconURL:newMessage.author.displayAvatarURL()})
