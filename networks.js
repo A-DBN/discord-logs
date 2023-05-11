@@ -13,7 +13,7 @@ const idsFilePath = './Stockage/ids.json';
 async function updateTikTokInfo() {
   tiktokUsername = "@areittv"
   try {
-    const browser = await puppeteer.launch({headless: "new"});
+    const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
     let page = await browser.newPage();
     await page.goto('http://tiktok.com/' + tiktokUsername);
     await page.waitForSelector('div[data-e2e="user-post-item"] a');
