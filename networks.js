@@ -6,32 +6,32 @@ const axios = require('axios')
 const env = require('dotenv').config()
 const { URLSearchParams } = require('url');
 const qs = require('qs')
+const puppeteer = require('puppeteer');
 
 const idsFilePath = './Stockage/ids.json';
 
 async function updateTikTokInfo() {
-    let tiktokUsername = 'AreiTTV';
-    
-    try {
-        const response = await axios.get(`https://api.tiktok.com/aweme/v1/user/?unique_id=${tiktokUsername}&language=en&verifyFp=verify_kpnn3q3f_YX9K4Nnw_hBOB_4czG_9bLc_MkwwJELf18mt&appType=musical_ly&ts=${Date.now()}`, {
-            headers: {
-              'User-Agent': 'okhttp',
-              'Accept-Encoding': 'gzip',
-              'X-Tt-Token': process.env.TIKTOK_ACCESS_TOKEN,
-            },
-          });
-      const userData = response.data.userData;
+  tiktokUsername = "@areittv"
+  try {
+    const browser = await puppeteer.launch({headless: "new"});
+    let page = await browser.newPage();
+    await page.goto('http://tiktok.com/' + tiktokUsername);
+    await page.waitForSelector('div[data-e2e="user-post-item"] a');
+    // parse user data
+    let followers = await(await page.$('strong[data-e2e=followers-count]')).evaluate(node => node.innerText); 
+    let likes = await(await page.$('strong[data-e2e=likes-count]')).evaluate(node => node.innerText); 
+    let profileImage = await page.$eval('#main-content-others_homepage > div > div.tiktok-1g04lal-DivShareLayoutHeader-StyledDivShareLayoutHeaderV2.enm41492 > div.tiktok-1gk89rh-DivShareInfo.ekmpd5l2 > div.tiktok-uha12h-DivContainer.e1vl87hj1 > span > img', img => img.getAttribute('src'));
+    await page.close()
+    await browser.close()
   
-      const embed = new MessageEmbed()
-        .setColor('#EE1D52')
-        .setAuthor(`${userData.nickname} (@${tiktokUsername})`, userData.coversMedium[0])
-        .setDescription(userData.signature)
-        .setThumbnail(userData.avatarMedium)
-        .setImage(userData.coversMedium[0])
-        .addField('Followers', userData.fans.toLocaleString(), true)
-        .addField('Following', userData.followings.toLocaleString(), true)
-        .addField('Total likes', userData.heartCount.toLocaleString(), true)
-        .setURL(`https://www.tiktok.com/@${tiktokUsername}`);
+    const embed = new MessageEmbed()
+    .setColor('#EE1D52')
+    .setAuthor(`${username} (${tiktokUsername})`, profileImage)
+    .addField('Followers', followers.toLocaleString(), true)
+    .addField('Total likes', likes.toLocaleString(), true)
+    .setURL(`https://www.tiktok.com/@${tiktokUsername}`)
+    .setThumbnail(profileImage)
+    .setFooter('@areittv on TikTok', 'https://i.imgur.com/OT2nXJG.png')
 
       let ids = { channelId: null, instagramEmbedId: null };
       try {
@@ -109,7 +109,7 @@ async function updateTikTokInfo() {
         .setImage(user.offline_image_url)
         .addField('Followers', total.toLocaleString(), true)
         .addField('Views', user.view_count.toLocaleString(), true)
-        .setFooter(`@${user.login} on Twitch`);
+        .setFooter(`@${user.login} on Twitch`, 'https://i.imgur.com/rQo24gB.png');
   
       let ids = {channelId: null, twitchEmbedId: null};
       try {
@@ -160,7 +160,7 @@ async function updateInstagramInfo() {
       .addField('Followers', userInfo.follower_count.toLocaleString(), true)
       .addField('Following', userInfo.following_count.toLocaleString(), true)
       .addField('Posts', userInfo.media_count.toLocaleString(), true)
-      .setFooter(`@${userInfo.username} on Instagram`);
+      .setFooter(`@${userInfo.username} on Instagram`, 'https://i.imgur.com/OWdUupI.png');
 
     let ids = { channelId: null, instagramEmbedId: null };
     try {
@@ -232,7 +232,7 @@ async function updateTwitterInfo() {
       .setImage(user.profile_banner_url)
       .addField('Followers', user.followers_count.toLocaleString(), true)
       .addField('Tweets', user.statuses_count.toLocaleString(), true)
-      .setFooter(`@${user.screen_name} on Twitter`);
+      .setFooter(`@${user.screen_name} on Twitter`, 'https://i.imgur.com/LS08Auh.png');
 
     let ids = {channelId: null, twitterEmbedId: null};
     try {
