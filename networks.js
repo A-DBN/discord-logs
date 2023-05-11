@@ -1,9 +1,11 @@
-const Twitter = require('twitter-lite');
+const Twitter = require('twitter');
 const { MessageEmbed } = require('discord.js');
 const { IgApiClient } = require('instagram-private-api');
 const fs = require('fs');
 const axios = require('axios')
 const env = require('dotenv').config()
+const { URLSearchParams } = require('url');
+const qs = require('qs')
 
 const idsFilePath = './Stockage/ids.json';
 
@@ -67,24 +69,35 @@ async function updateTikTokInfo() {
       console.error(`Error while updating TikTok info: ${error}`);
     }
   }
-
-async function updateTwitchInfo() {
+  
+  async function updateTwitchInfo() {
+    const clientId = process.env.TWITCH_CLIENT_ID;
+    const clientSecret = process.env.TWITCH_CLIENT_SECRET;
     const username = 'areittv';
+  
+    // Generate access token
+    const params = new URLSearchParams();
+    params.append('client_id', clientId);
+    params.append('client_secret', clientSecret);
+    params.append('grant_type', 'client_credentials');
+    params.append('scope', 'user:read:email');
+  
+    const { data: { access_token } } = await axios.post(`https://id.twitch.tv/oauth2/token`, params);
   
     try {
       // Get user ID for the given username
       const { data: { data: [user] } } = await axios.get(`https://api.twitch.tv/helix/users?login=${username}`, {
         headers: {
-          'Client-ID': process.env.TWITCH_CLIENT_ID,
-          'Authorization': `Bearer ${process.env.TWITCH_ACCESS_TOKEN}`
+          'Authorization': `Bearer ${access_token}`,
+          'Client-ID': clientId
         }
       });
   
       // Get the number of followers for the user ID
       const { data: { total } } = await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${user.id}`, {
         headers: {
-          'Client-ID': process.env.TWITCH_CLIENT_ID,
-          'Authorization': `Bearer ${process.env.TWITCH_ACCESS_TOKEN}`
+          'Authorization': `Bearer ${access_token}`,
+          'Client-ID': clientId
         }
       });
   
@@ -125,6 +138,7 @@ async function updateTwitchInfo() {
       console.error(`Error while updating Twitch info: ${error}`);
     }
   }
+  
 
 const igClient = new IgApiClient();
 igClient.state.generateDevice('zenbot');
@@ -177,23 +191,34 @@ async function updateInstagramInfo() {
 }
 
 async function updateTwitterInfo() {
-    const twitterClient = new Twitter({
-        consumer_key: process.env.TWITTER_CONSUMER_KEY,
-        consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-        bearer_token: process.env.TWITTER_BEARER_TOKEN,
-        access_token_key: process.env.TWITTER_ACCESS_TOKEN,
-        access_token_secret: process.env.TWITTER_ACCESS_SECRET_TOKEN
+  // Twitter API OAuth 2.0 authentication
+  const authOptions = {
+    method: 'POST',
+    url: 'https://api.twitter.com/oauth2/token',
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${process.env.TWITTER_CONSUMER_KEY}:${process.env.TWITTER_CONSUMER_SECRET}`).toString('base64')}`,
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    data: qs.stringify({
+      grant_type: 'client_credentials'
     })
-    
-
-  // Replace "TWITTER_USERNAME" with your Twitter username
-  const params = {
-    screen_name: 'AreiTTV',
-    include_entities: true,
-    tweet_mode: 'extended'
   };
 
   try {
+    const response = await axios(authOptions);
+    const { access_token: bearerToken } = response.data;
+
+    const twitterClient = new Twitter({
+      bearer_token: bearerToken
+    });
+
+    // Replace "TWITTER_USERNAME" with your Twitter username
+    const params = {
+      screen_name: 'AreiTTV',
+      include_entities: true,
+      tweet_mode: 'extended'
+    };
+
     const [user, tweets] = await Promise.all([
       twitterClient.get('users/show', params),
       twitterClient.get('statuses/user_timeline', params)
@@ -236,6 +261,7 @@ async function updateTwitterInfo() {
     console.error(`Error while updating Twitter info: ${error}`);
   }
 }
+
 
 module.exports = {
     updateTwitterInfo,
