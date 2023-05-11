@@ -10,7 +10,7 @@ module.exports = {
         updateInstagramInfo()
         updateTwitchInfo()
         updateTwitterInfo()
-        // updateTikTokInfo()
+        updateTikTokInfo()
 	const embed = new MessageEmbed()
         .setTitle('Redemarrage du bot')
         .setColor('#5ac18e')
