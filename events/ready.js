@@ -1,6 +1,6 @@
 const {MessageEmbed} = require("discord.js");
 const env = require ('dotenv').config()
-const { updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo } = require('../networks.js')
+const { updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo, updateSpotifyInfo } = require('../networks.js')
 
 module.exports = {
     name: 'ready',
@@ -11,6 +11,7 @@ module.exports = {
         updateTwitchInfo()
         updateTwitterInfo()
         updateTikTokInfo()
+        updateSpotifyInfo()
 	const embed = new MessageEmbed()
         .setTitle('Redemarrage du bot')
         .setColor('#5ac18e')
