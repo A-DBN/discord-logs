@@ -9,7 +9,7 @@ module.exports = {
     .setDescription('Give you the follower role if you follow Casca on Twitch')
     .addStringOption(option => option.setName('name').setRequired(true).setDescription('Twitch Name')),
   execute: async (interaction) => {
-    const followerRoleId = '1104681838997422080';
+    const followerRoleId = '1104679332170969089';
     const member = interaction.member;
     const twitchUsername = interaction.options.getString('name');
 
@@ -17,11 +17,24 @@ module.exports = {
       return interaction.reply({ content: 'Tu as déjà le rôle Follower', ephemeral: true });
     }
 
+    const clientId = process.env.TWITCH_CLIENT_ID;
+    const clientSecret = process.env.TWITCH_CLIENT_SECRET;
+    const username = 'areittv';
+  
+    // Generate access token
+    const params = new URLSearchParams();
+    params.append('client_id', clientId);
+    params.append('client_secret', clientSecret);
+    params.append('grant_type', 'client_credentials');
+    params.append('scope', 'user:read:email');
+  
+    const { data: { access_token } } = await axios.post(`https://id.twitch.tv/oauth2/token`, params);
+
     try {
       const twitchResponse = await axios.get(`https://api.twitch.tv/helix/users?login=${twitchUsername}`, {
         headers: {
           'Client-ID': process.env.TWITCH_CLIENT_ID,
-          'Authorization': `Bearer ${process.env.TWITCH_ACCESS_TOKEN}`
+          'Authorization': `Bearer ${access_token}`
         }
       });
       if (twitchResponse.data.data.length === 0) {
@@ -32,7 +45,7 @@ module.exports = {
       const followsResponse = await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${process.env.CASCA_CHANNEL_ID}&from_id=${twitchUserId}`, {
         headers: {
           'Client-ID': process.env.TWITCH_CLIENT_ID,
-          'Authorization': `Bearer ${process.env.TWITCH_ACCESS_TOKEN}`
+          'Authorization': `Bearer ${access_token}`
         }
       });
       
