@@ -11,7 +11,7 @@ module.exports = {
             .addStringOption(option => option.setName('a3').setRequired(false).setDescription("Troisième choix"))
             .addStringOption(option => option.setName('a4').setRequired(false).setDescription("Quatrième choix")),
         execute: async (interaction) => {
-            const user = interaction.user.username
+            const user = interaction.user
             const question = interaction.options.getString('question')
             const a1 = interaction.options.getString('a1')
             const a2 = interaction.options.getString('a2')
@@ -26,9 +26,10 @@ module.exports = {
 
             const embed = new MessageEmbed()
             .setColor('RANDOM')
-            .setTitle(user)
-            .setDescription(question)
+            .setAuthor(user.username, user.displayAvatarURL())
+            .setDescription(`**${question}**`)
             .addFields(
+                {name: ' ', value: ' ', inline: false},
                 {name: `1️⃣ ${choices[0]}`, value: ' ', inline: false},
                 {name: `2️⃣ ${choices[1]}`, value: ' ', inline: false}
             )
