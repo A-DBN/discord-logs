@@ -1,5 +1,6 @@
-const {MessageEmbed} = require("discord.js");
+const {MessageEmbed, MessageAttachment} = require("discord.js");
 const env = require ('dotenv').config()
+const Canvas = require('canvas');
 
 module.exports = {
     name: 'guildMemberRemove',
@@ -42,5 +43,38 @@ module.exports = {
             if (embed.description)
                 client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         }
+
+        const canvas = Canvas.createCanvas(700, 250);
+        const ctx = canvas.getContext('2d');
+        const channel = client.channels.cache.get('980471046815772714');
+
+        const background = await Canvas.loadImage('./assets/bg.png');
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    
+        // Load the member's avatar and add it to the canvas
+        const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'png' }));
+    
+        // Draw a circular clip around the avatar
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, 100, 75, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.clip();
+    
+        // Draw the avatar in the center of the canvas
+        ctx.drawImage(avatar, canvas.width / 2 - 75, 25, 150, 150);
+    
+        // Restore the canvas so that the text is not clipped
+        ctx.restore();
+    
+        // Add the welcome message below the avatar
+        ctx.font = 'bold 36px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${member.user.username} nous a trahis !`, canvas.width / 2, 220);
+    
+    
+        const attachment = new MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+        channel.send({files: [attachment]})
     }
 }

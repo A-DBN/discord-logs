@@ -1,11 +1,12 @@
-const { Client, Intents, Collection, Interaction } = require("discord.js");
+const { Client, Intents, Collection, Interaction, MessageEmbed } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_INVITES, Intents.FLAGS.GUILD_VOICE_STATES] });
 global.client = client
 const env = require('dotenv').config()
 const fs = require('fs')
 const cron = require('node-cron');
 
-const {updateTwitterInfo, updateInstagramInfo, updateTwitchInfo } = require('./networks.js')
+const {isLive} = require('./utils/twitchAlert.js')
+const {updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo, updateSpotifyInfo } = require('./networks.js')
 
 require('./deploy-commands.js')
 
@@ -41,10 +42,17 @@ client.on('interactionCreate', async interaction => {
     }
 })
 
+setInterval(async () => {
+    isLive()
+  }, 1000 * 60 * 5);
+  
+
 cron.schedule('0 0 * * *', () => {
     updateTwitterInfo()
     updateInstagramInfo()
     updateTwitchInfo()
+    updateTikTokInfo()
+    updateSpotifyInfo()
 });
 
 client.login(process.env.token);
