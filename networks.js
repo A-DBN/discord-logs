@@ -8,6 +8,8 @@ const { URLSearchParams } = require('url');
 const qs = require('qs')
 const puppeteer = require('puppeteer');
 
+const {getTwitchAccessToken} = require('./utils/auth.js')
+
 const idsFilePath = './Stockage/ids.json';
 
 async function updateSpotifyInfo() {
@@ -151,15 +153,7 @@ async function updateTikTokInfo() {
     const clientId = process.env.TWITCH_CLIENT_ID;
     const clientSecret = process.env.TWITCH_CLIENT_SECRET;
     const username = 'areittv';
-  
-    // Generate access token
-    const params = new URLSearchParams();
-    params.append('client_id', clientId);
-    params.append('client_secret', clientSecret);
-    params.append('grant_type', 'client_credentials');
-    params.append('scope', 'user:read:email');
-  
-    const { data: { access_token } } = await axios.post(`https://id.twitch.tv/oauth2/token`, params);
+    const access_token = await getTwitchAccessToken();
   
     try {
       // Get user ID for the given username
