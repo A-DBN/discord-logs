@@ -27,9 +27,6 @@ module.exports = {
             embed.setThumbnail(newMember.user.displayAvatarURL())
             oldMember._roles.length > newMember._roles.length ? embed.setDescription(`Deleted role <@&${_.difference(oldMember._roles, newMember._roles)[0]}>`) : embed.setDescription(`Added role <@&${_.difference(newMember._roles, oldMember._roles)[0]}>`)
             embed.setTimestamp()
-        } else if (oldMember.pending === true && newMember.pending === false) {
-            newMember.roles.add("980471045729431614")
-            return
         } else {
             embed.setTitle('Member Updated')
             embed.setColor('#ffdf00')
