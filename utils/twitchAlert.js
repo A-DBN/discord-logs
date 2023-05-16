@@ -42,7 +42,7 @@ function sendTwitchLiveMessage(channel, access_token) {
 
         const embed = new EmbedBuilder()
             .setColor(Number(0x6441A4))
-            .setAuthor(channelData.broadcaster_name, userData.profile_image_url, `https://twitch.tv/${channelData.broadcaster_name}`)
+            .setAuthor({name:channelData.broadcaster_name, iconURL:userData.profile_image_url, url:`https://twitch.tv/${channelData.broadcaster_name}`})
             .setImage(gameData.box_art_url.replace('_IGDB-{width}x{height}', ''))
             .setTitle(`**${channelData.title}**`)
             .setURL(`https://twitch.tv/${channelData.broadcaster_login}`)
@@ -51,7 +51,7 @@ function sendTwitchLiveMessage(channel, access_token) {
               {name: 'Viewers', value: String(streamData.viewer_count), inline: true}
             )
             .setImage(streamData.thumbnail_url.replace('{width}', '1280').replace('{height}', '720'))
-            .setFooter('Twitch', 'https://i.imgur.com/rQo24gB.png')
+            .setFooter({text:'Twitch', iconURL:'https://i.imgur.com/rQo24gB.png'})
             .setTimestamp();
 
         channel.send({content: "@everyone areittv est en ligne par ici -> https://twitch.tv/areittv", embeds: [embed] });
@@ -82,7 +82,6 @@ async function isLive() {
   
         if (data.data.length > 0) {
           if (!idsData.isLive) {
-            console.log("jsuis pas en live")
             sendTwitchLiveMessage(channel, access_token);
             idsData.isLive = true;
             try {
