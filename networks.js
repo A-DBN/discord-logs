@@ -40,7 +40,6 @@ async function updateSpotifyInfo() {
   //   });
   try {
     const URL = "https://open.spotify.com/user/izbhsh9rxqf0darc2stcap265"
-    // const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
     const browser = await puppeteer.launch({headless: "new" });
 
     const page = await browser.newPage();
@@ -94,8 +93,7 @@ async function updateSpotifyInfo() {
 async function updateTikTokInfo() {
   tiktokUsername = "@areittv"
   try {
-    // const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
-    const browser = await puppeteer.launch({headless: "new"});
+    const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
     let page = await browser.newPage();
     await page.goto('http://tiktok.com/' + tiktokUsername);
     await page.waitForSelector('div[data-e2e="user-post-item"] a');
