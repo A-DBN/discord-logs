@@ -44,7 +44,7 @@ module.exports = {
         client.user.setActivity('AreiTTV on Twitch', { type: 'WATCHING' })
         // truc()
         if (getObject('TwitterUpdate').enabled === true) updateTwitterInfo();
-        // if (getObject('InstagramUpdate').enabled === true) updateInstagramInfo();
+        if (getObject('InstagramUpdate').enabled === true) updateInstagramInfo();
         if (getObject('TwitchUpdate').enabled === true) updateTwitchInfo();
         if (getObject('TikTokUpdate').enabled === true) updateTikTokInfo();
         if (getObject('SpotifyUpdate').enabled === true) updateSpotifyInfo();

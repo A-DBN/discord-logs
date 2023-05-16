@@ -49,8 +49,7 @@ module.exports = {
 
         const canvas = Canvas.createCanvas(700, 250);
         const ctx = canvas.getContext('2d');
-        const channel = client.channels.cache.get('980527661422108702');
-        // 980471046815772714
+        const channel = client.channels.cache.get('980471046815772714');
 
         const background = await Canvas.loadImage('./assets/bg.jpg');
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
