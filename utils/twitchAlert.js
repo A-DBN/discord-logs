@@ -1,6 +1,6 @@
 const axios = require('axios')
 const env = require('dotenv').config()
-const {MessageEmbed} = require('discord.js')
+const { EmbedBuilder } = require('@discordjs/builders');
 const {getTwitchAccessToken} = require('./auth.js')
 const fs = require('fs')
 
@@ -40,8 +40,8 @@ function sendTwitchLiveMessage(channel, access_token) {
       }).then(res => {
         const gameData = res.data.data[0];
 
-        const embed = new MessageEmbed()
-            .setColor('#6441A4')
+        const embed = new EmbedBuilder()
+            .setColor(Number(0x6441A4))
             .setAuthor(channelData.broadcaster_name, userData.profile_image_url, `https://twitch.tv/${channelData.broadcaster_name}`)
             .setImage(gameData.box_art_url.replace('_IGDB-{width}x{height}', ''))
             .setTitle(`**${channelData.title}**`)
@@ -100,7 +100,6 @@ async function isLive() {
               console.error(error);
             }
           }
-          console.log(`AreiTTV is not live`);
         }
       })
       .catch(error => {

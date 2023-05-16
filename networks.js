@@ -1,5 +1,5 @@
 const Twitter = require('twitter');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('@discordjs/builders');
 const { IgApiClient } = require('instagram-private-api');
 const fs = require('fs');
 const axios = require('axios')
@@ -40,7 +40,9 @@ async function updateSpotifyInfo() {
   //   });
   try {
     const URL = "https://open.spotify.com/user/izbhsh9rxqf0darc2stcap265"
-    const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
+    // const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
+    const browser = await puppeteer.launch({headless: "new" });
+
     const page = await browser.newPage();
 
     await page.goto(URL, {waitUntil: 'networkidle2'});
@@ -51,15 +53,15 @@ async function updateSpotifyInfo() {
     const public = await page.$eval('#main > div > div.ZQftYELq0aOsg6tPbVbV > div.jEMA2gVoLgPQqAFrPhFw.lPapCDz3v_LipgXwe8gi > div.main-view-container > div.os-host.os-host-foreign.os-theme-spotify.os-host-resize-disabled.os-host-scrollbar-horizontal-hidden.main-view-container__scroll-node.os-host-transition.os-host-overflow.os-host-overflow-y > div.os-padding > div > div > div.main-view-container__scroll-node-child > main > section > div > div.contentSpacing.NXiYChVp4Oydfxd7rT5r.RMDSGDMFrx8eXHpFphqG > div.RP2rRchy4i8TIp1CTmb7 > div > span:nth-child(1)', el => el.innerText);
     await browser.close();
 
-    const embed = new MessageEmbed()
-      .setColor('#1DB954')
-      .setAuthor(`${displayName}`, profile_picture, URL)
+    const embed = new EmbedBuilder()
+      .setColor(Number(0x1DB954))
+      .setAuthor({name: displayName, iconURL:profile_picture, url:URL})
       .addFields(
         {name: "Followers", value: `${followers.split(/\s+/)[0]}`, inline: true},
         {name: "Public Playlists", value: `${public.split(/\s+/)[0]}`, inline: true}
       )
       .setThumbnail(profile_picture)
-      .setFooter(`@${displayName} on Spotify`, 'https://i.imgur.com/qvdqtsc.png');
+      .setFooter({text: `@${displayName} on Spotify`, iconURL:'https://i.imgur.com/qvdqtsc.png'});
   
     let ids = {channelId: null, spotifyEmbedId: null};
     try {
@@ -92,7 +94,8 @@ async function updateSpotifyInfo() {
 async function updateTikTokInfo() {
   tiktokUsername = "@areittv"
   try {
-    const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
+    // const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser'});
+    const browser = await puppeteer.launch({headless: "new"});
     let page = await browser.newPage();
     await page.goto('http://tiktok.com/' + tiktokUsername);
     await page.waitForSelector('div[data-e2e="user-post-item"] a');
@@ -103,14 +106,16 @@ async function updateTikTokInfo() {
     await page.close()
     await browser.close()
   
-    const embed = new MessageEmbed()
-    .setColor('#EE1D52')
-    .setAuthor(`${username}`, profileImage, `https://www.tiktok.com/@${tiktokUsername}`)
-    .addField('Followers', followers.toLocaleString(), true)
-    .addField('Total likes', likes.toLocaleString(), true)
+    const embed = new EmbedBuilder()
+    .setColor(Number(0xEE1D52))
+    .setAuthor({name:username, iconURL: profileImage, url:`https://www.tiktok.com/@${tiktokUsername}`})
+    .addFields(
+      {name:'Followers', value:followers.toLocaleString(), inline:true},
+      {name:'Total likes', value:likes.toLocaleString(), inline:true}
+    )
     .setURL(`https://www.tiktok.com/@${tiktokUsername}`)
     .setThumbnail(profileImage)
-    .setFooter('@areittv on TikTok', 'https://i.imgur.com/OT2nXJG.png')
+    .setFooter({text:'@areittv on TikTok', iconURL:'https://i.imgur.com/OT2nXJG.png'})
 
       let ids = { channelId: null, instagramEmbedId: null };
       try {
@@ -172,15 +177,17 @@ async function updateTikTokInfo() {
         }
       });
   
-      const embed = new MessageEmbed()
-        .setColor('#9146FF')
-        .setAuthor(`${user.display_name}`, user.profile_image_url, 'https://www.twitch.tv/areittv')
+      const embed = new EmbedBuilder()
+        .setColor(Number(0x9146FF))
+        .setAuthor({name: user.display_name, iconURL:user.profile_image_url, url:'https://www.twitch.tv/areittv'})
         .setDescription(user.description)
         .setThumbnail(user.profile_image_url)
         .setImage(user.offline_image_url)
-        .addField('Followers', total.toLocaleString(), true)
-        .addField('Views', user.view_count.toLocaleString(), true)
-        .setFooter(`@${user.login} on Twitch`, 'https://i.imgur.com/rQo24gB.png');
+        .addFields(
+          {name:'Followers', value:total.toLocaleString(), inline:true},
+          {name:'Views', value:user.view_count.toLocaleString(), inline:true}
+        )
+        .setFooter({text:`@${user.login} on Twitch`, iconURL:'https://i.imgur.com/rQo24gB.png'});
   
       let ids = {channelId: null, twitchEmbedId: null};
       try {
@@ -223,15 +230,17 @@ async function updateInstagramInfo() {
     const user = await igClient.user.searchExact(username);
     const userInfo = await igClient.user.info(user.pk);
     
-    const embed = new MessageEmbed()
-      .setColor('#C13584')
-      .setAuthor(userInfo.username, userInfo.profile_pic_url, `https://www.instagram.com/${userInfo.username}/`)
+    const embed = new EmbedBuilder()
+      .setColor(Number(0xC13584))
+      .setAuthor({name: userInfo.username, iconURL:userInfo.profile_pic_url, url:`https://www.instagram.com/${userInfo.username}/`})
       .setDescription(userInfo.biography)
       .setThumbnail(userInfo.profile_pic_url)
-      .addField('Followers', userInfo.follower_count.toLocaleString(), true)
-      .addField('Following', userInfo.following_count.toLocaleString(), true)
-      .addField('Posts', userInfo.media_count.toLocaleString(), true)
-      .setFooter(`@${userInfo.username} on Instagram`, 'https://i.imgur.com/OWdUupI.png');
+      .addFields(
+        {name:'Followers', value:userInfo.follower_count.toLocaleString(), inline:true},
+        {name:'Following', value:userInfo.following_count.toLocaleString(), inline:true},
+        {name:'Posts', value:userInfo.media_count.toLocaleString(), inline:true}
+      )
+      .setFooter({text:`@${userInfo.username} on Instagram`, iconURL:'https://i.imgur.com/OWdUupI.png'});
 
     let ids = { channelId: null, instagramEmbedId: null };
     try {
@@ -295,15 +304,17 @@ async function updateTwitterInfo() {
       twitterClient.get('statuses/user_timeline', params)
     ]);
 
-    const embed = new MessageEmbed()
-      .setColor('#1DA1F2')
-      .setAuthor(user.name, user.profile_image_url_https, `https://twitter.com/${user.screen_name}`)
+    const embed = new EmbedBuilder()
+      .setColor(Number(0x1DA1F2))
+      .setAuthor({name:user.name, iconURL:user.profile_image_url_https, url:`https://twitter.com/${user.screen_name}`})
       .setDescription(user.description)
       .setThumbnail(user.profile_image_url_https)
       .setImage(user.profile_banner_url)
-      .addField('Followers', user.followers_count.toLocaleString(), true)
-      .addField('Tweets', user.statuses_count.toLocaleString(), true)
-      .setFooter(`@${user.screen_name} on Twitter`, 'https://i.imgur.com/LS08Auh.png');
+      .addFields(
+        {name:'Followers', value:user.followers_count.toLocaleString(), inline:true},
+        {name:'Tweets', value:user.statuses_count.toLocaleString(), inline:true}
+      )
+      .setFooter({text:`@${user.screen_name} on Twitter`, iconURL:'https://i.imgur.com/LS08Auh.png'});
 
     let ids = {channelId: null, twitterEmbedId: null};
     try {

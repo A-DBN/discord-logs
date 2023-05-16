@@ -1,17 +1,19 @@
-const {MessageEmbed} = require("discord.js");
+const { EmbedBuilder } = require('@discordjs/builders');
 const env = require ('dotenv').config()
+const {getObject} = require('../utils/utils.js')
 
 module.exports = {
     name: 'channelUpdate',
     on: true,
     execute(oldChannel, newChannel) {
         if (oldChannel.name !== newChannel.name) {
-            const embed = new MessageEmbed()
+            if (getObject('channelUpdate').enabled === false) return;
+            const embed = new EmbedBuilder()
             .setTitle("Channel Update")
-            .setColor("#ffdf00")
+            .setColor(Number(0xffdf00))
             .setDescription(`Channel **${oldChannel.name}** has been updated to **${newChannel.name}** `)
             .setTimestamp()
-            if (embed.description)
+            if (embed.description !== '')
                 client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         }
     }

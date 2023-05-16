@@ -1,17 +1,19 @@
-const {MessageEmbed} = require("discord.js");
+const { EmbedBuilder } = require('@discordjs/builders');
 const env = require ('dotenv').config()
+const {getObject} = require('../utils/utils.js')
 
 module.exports = {
     name: 'roleCreate',
     on: true,
     execute(role) {
-        const embed = new MessageEmbed()
+        if (getObject('roleCreate').enabled === false) return;
+        const embed = new EmbedBuilder()
         .setTitle('Role Created')
-        .setColor('#5ac18e')
+        .setColor(Number(0x5ac18e))
         .setAuthor(role.client.user.tag, role.client.user.displayAvatarURL())
         .setDescription(`Role **${role.name}** was created`)
         .setTimestamp()
-        if (embed.description)
+        if (embed.description !== '')
             client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }

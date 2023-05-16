@@ -1,16 +1,18 @@
-const {MessageEmbed} = require("discord.js");
+const { EmbedBuilder } = require('@discordjs/builders');
 const env = require ('dotenv').config()
+const {getObject} = require('../utils/utils.js')
 
 module.exports = {
     name: 'channelCreate',
     on: true,
     execute(channel) {
-        const embed = new MessageEmbed()
+        if (getObject('channelCreate').enabled === false) {console.log("c\'est desactivé") ;return};
+        const embed = new EmbedBuilder()
         .setTitle('Channel Created')
-        .setColor('#5ac18e')
+        .setColor(Number(0x5ac18e))
         .setDescription(`Channel **${channel.name}** created`)
         .setTimestamp()
-        if (embed.description)
+        if (embed.description !== '')
             client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
     }
 }

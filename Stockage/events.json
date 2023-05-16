@@ -1,0 +1,148 @@
+{
+    "events": [
+        {
+            "name": "channelCreate",
+            "value": "channelcreate",
+            "description": "S'active quand un channel est créee",
+            "enabled": true
+        },
+        {
+            "name": "channelDelete",
+            "value": "channeldelete",
+            "description": "S'active quand un channel est supprimé",
+            "enabled": true
+        },
+        {
+            "name": "channelUpdate",
+            "value": "channelupdate",
+            "description": "S'active quand un channel est modifié",
+            "enabled": true
+        },
+        {
+            "name": "emojiCreate",
+            "value": "emojicreate",
+            "description": "S'active quand un émoji est rajouté",
+            "enabled": true
+        },
+        {
+            "name": "emojiDelete",
+            "value": "emojidelete",
+            "description": "S'active quand un emoji est supprimé",
+            "enabled": true
+        },
+        {
+            "name": "emojiUpdate",
+            "value": "emojiupdate",
+            "description": "S'active quand un emoji est modifié",
+            "enabled": true
+        },
+        {
+            "name": "guildBanAdd",
+            "value": "guildebanadd",
+            "description": "S'active quand un utilisateur est bannis",
+            "enabled": true
+        },
+        {
+            "name": "guildBanRemove",
+            "value": "guildebanremove",
+            "description": "S'active quand un utilisateur est débannis",
+            "enabled": true
+        },
+        {
+            "name": "WelcomeMessage",
+            "value": "welcomemessage",
+            "description": "S'active quand un utilisateur rejoint le serveur",
+            "enabled": true
+        },
+        {
+            "name": "TwitchRoleGive",
+            "value": "twitchrolegive",
+            "description": "S'active quand un utilisateur rejoint le serveur",
+            "enabled": true
+        },
+        {
+            "name": "guildMemberRemove",
+            "value": "guildememberremove",
+            "description": "S'active quand un utilisateur quitte le serveur",
+            "enabled": true
+        },
+        {
+            "name": "guildMemberUpdate",
+            "value": "guildmemberupdate",
+            "description": "S'active quand un utilisateur est modifié",
+            "enabled": true
+        },
+        {
+            "name": "messageDelete",
+            "value": "messagedelete",
+            "description": "S'active quand un message est supprimé",
+            "enabled": true
+        },
+        {
+            "name": "messageUpdate",
+            "value": "messageupdate",
+            "description": "S'active quand un message est modifié",
+            "enabled": true
+        },
+        {
+            "name": "roleCreate",
+            "value": "rolecreate",
+            "description": "S'active quand un rôle est crée",
+            "enabled": true
+        },
+        {
+            "name": "roleDelete",
+            "value": "roledelete",
+            "description": "S'active quand un role est supprimé",
+            "enabled": true
+        },
+        {
+            "name": "roleUpdate",
+            "value": "roleupdate",
+            "description": "S'active quand un rôle est modifié",
+            "enabled": true
+        },
+        {
+            "name": "voiceStateUpdate",
+            "value": "voicestateupdate",
+            "description": "S'active quand un utilisateur rejoint/quitte ou change de channel vocal",
+            "enabled": true
+        },
+        {
+            "name": "InstagramUpdate",
+            "value": "instagramupdate",
+            "description": "S'active quand un rôle est modifié",
+            "enabled": true
+        },
+        {
+            "name": "TwitterUpdate",
+            "value": "twitterupdate",
+            "description": "S'active quand un rôle est modifié",
+            "enabled": true
+        },
+        {
+            "name": "TikTokUpdate",
+            "value": "tiktokupdate",
+            "description": "S'active quand un rôle est modifié",
+            "enabled": true
+        },
+        {
+            "name": "SpotifyUpdate",
+            "value": "spotifyupdate",
+            "description": "S'active quand un rôle est modifié",
+            "enabled": true
+        },
+        {
+            "name": "TwitchUpdate",
+            "value": "twitchupdate",
+            "description": "S'active quand un rôle est modifié",
+            "enabled": true
+        },
+        {
+            "name": "TwitchLiveAlert",
+            "value": "twitchlivealert",
+            "description": "S'active quand un rôle est modifié",
+            "enabled": true
+        }
+    ]
+}
