@@ -123,7 +123,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 setInterval(async () => {
 	if (getObject('TwitchLiveAlert').enabled === true) isLive();
-  }, 1000 * 20 * 1);
+  }, 1000 * 60 * 3);
   
 
 cron.schedule('0 0 * * *', () => {
