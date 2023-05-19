@@ -65,8 +65,6 @@ client.on('messageCreate', message => {
           });
         });
       });      
-  } else {
-    message.delete()
   }
 });
 
