@@ -21,7 +21,7 @@ function setButtonStyle(style) {
 
 function editMessage() {
     const roleEmbedId = require('../Stockage/ids.json').roleEmbedId;
-    const targetChannelId = '980527661422108702';
+    const targetChannelId = '980471046815772717';
   
     client.channels.fetch(targetChannelId)
       .then(channel => channel.messages.fetch(roleEmbedId))
