@@ -1,0 +1,19 @@
+{
+    "roles": [
+        {
+            "name": "Minecraft",
+            "icon_name": "<:minecraft:980941951803220048>",
+            "color": "SUCCESS"
+        },
+        {
+            "name": "League of Legends",
+            "icon_name": "<:lol:980941985244405800> ",
+            "color": "PRIMARY"
+        },
+        {
+            "name": "Valorant",
+            "icon_name": "<:valo:987317373868576818>",
+            "color": "DANGER"
+        }
+    ]
+}

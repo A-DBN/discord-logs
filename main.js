@@ -5,7 +5,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {isLive} = require('./utils/twitchAlert.js')
 const {getObject} = require('./utils/utils.js')
-const {updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo, updateSpotifyInfo } = require('./networks.js')
+const {updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo, updateSpotifyInfo } = require('./networks.js');
+const { updateEmbed } = require('./utils/team.js');
+
 // Create a new client instance
 const client = new Client({ 
     intents: [
@@ -60,30 +62,68 @@ for (const file of commandFiles) {
 }
 
 client.on(Events.InteractionCreate, async interaction => {
-	if (!interaction.isChatInputCommand()) return;
+	if (interaction.isChatInputCommand()) {
+		const command = interaction.client.commands.get(interaction.commandName);
 
-	const command = interaction.client.commands.get(interaction.commandName);
+		if (!command) {
+			console.error(`No command matching ${interaction.commandName} was found.`);
+			return;
+		}
 
-	if (!command) {
-		console.error(`No command matching ${interaction.commandName} was found.`);
-		return;
-	}
+		try {
+			await command.execute(interaction);
+		} catch (error) {
+			console.error(error);
+			if (interaction.replied || interaction.deferred) {
+				await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+			} else {
+				await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			}
+		}
+	} else if (interaction.isButton()) {
+		if (interaction.channelId === '980471046815772717') {
+			const roleName = interaction.customId;
+			const role = interaction.guild.roles.cache.find(role => role.name === roleName);
 
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+			if (role) {
+				const member = interaction.guild.members.cache.get(interaction.user.id);
+				if (interaction.member.roles.cache.has(role.id)) {
+				member.roles.remove(role)
+					.then(() => {
+					console.log(`Removed role ${roleName} from ${member.user.tag}`);
+					})
+					.catch(console.error);
+				} else {
+				member.roles.add(role)
+					.then(() => {
+					console.log(`Assigned role ${roleName} to ${member.user.tag}`);
+					})
+					.catch(console.error);
+				}
+				interaction.deferUpdate()
+			} else {
+				console.log(`Role ${roleName} not found.`);
+			}
 		} else {
-			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			if (interaction.customId === 'Join') {
+				if (players.includes(interaction.user.id)) return 
+				players.push(interaction.user.id);
+				updateEmbed(interaction)
+			} else if (interaction.customId === 'Leave') {
+				const index = players.indexOf(interaction.user.id);
+				if (index > -1) {
+					players.splice(index, 1);
+				}
+				updateEmbed(interaction)
+			}
+			interaction.deferUpdate()
 		}
 	}
 });
 
 setInterval(async () => {
 	if (getObject('TwitchLiveAlert').enabled === true) isLive();
-  }, 1000 * 60 * 3);
+  }, 1000 * 20 * 1);
   
 
 cron.schedule('0 0 * * *', () => {
