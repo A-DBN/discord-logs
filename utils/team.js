@@ -14,7 +14,7 @@ function updateEmbed(interaction) {
         .setTimestamp()
         .setFooter({text:embed.footer.text})
     players.forEach(player => {
-        new_embed.addFields({name: `‎`, value: `<@${player}>`, inline: true})
+        new_embed.addFields({name: `‎`, value: `<@${player}>`, inline: false})
     })
 
     message.edit({embeds: [new_embed], components: components})
