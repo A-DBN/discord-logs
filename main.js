@@ -107,14 +107,17 @@ client.on(Events.InteractionCreate, async interaction => {
 		} else {
 			if (interaction.customId === 'Join') {
 				if (players.includes(interaction.user.id)) return 
+				if (players.length > 5) return interaction.reply({ content: 'The team is full!', ephemeral: true })
 				players.push(interaction.user.id);
 				updateEmbed(interaction)
 			} else if (interaction.customId === 'Leave') {
 				const index = players.indexOf(interaction.user.id);
 				if (index > -1) {
 					players.splice(index, 1);
+					updateEmbed(interaction)
+				} else {
+					interaction.reply({ content: 'You are not in the team!', ephemeral: true });
 				}
-				updateEmbed(interaction)
 			}
 			interaction.deferUpdate()
 		}
