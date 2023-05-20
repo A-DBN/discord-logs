@@ -5,6 +5,7 @@ const {getObject} = require('../utils/utils.js')
 module.exports = {
     name: 'voiceStateUpdate',
     async execute(oldState, newState) {
+        console.log("5")
         if (getObject('voiceStateUpdate').enabled === false) return;
         const embed = new EmbedBuilder()
         if ((oldState.channelId !== newState.channelId) && newState.channelId === null) {

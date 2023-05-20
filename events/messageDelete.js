@@ -6,6 +6,7 @@ module.exports = {
     name: 'messageDelete',
     on: true,
     execute(message) {
+        console.log("6")
         if (getObject('messageDelete').enabled === false) return;
         if (message.channel.id !== process.env.log_channel_id && !message.author.bot) {
             const embed = new EmbedBuilder()

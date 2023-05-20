@@ -7,6 +7,7 @@ module.exports = {
     name: 'messageUpdate',
     on: true,
     execute(oldMessage, newMessage) {
+        console.log("4")
         if (getObject('messageUpdate').enabled === false) return;
         if (oldMessage.channel.id !== process.env.log_channel_id && !oldMessage.author.bot && oldMessage.content !== newMessage.content) {
             const embed = new EmbedBuilder()

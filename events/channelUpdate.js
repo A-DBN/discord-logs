@@ -6,6 +6,7 @@ module.exports = {
     name: 'channelUpdate',
     on: true,
     execute(oldChannel, newChannel) {
+        console.log("3")
         if (oldChannel.name !== newChannel.name) {
             if (getObject('channelUpdate').enabled === false) return;
             const embed = new EmbedBuilder()

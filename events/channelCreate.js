@@ -6,6 +6,7 @@ module.exports = {
     name: 'channelCreate',
     on: true,
     execute(channel) {
+        console.log("1")
         if (getObject('channelCreate').enabled === false) {console.log("c\'est desactivé") ;return};
         const embed = new EmbedBuilder()
         .setTitle('Channel Created')

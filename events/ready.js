@@ -43,11 +43,11 @@ module.exports = {
         console.log(`Ready to work ! Logged in as ${client.user.tag}`)
         client.user.setActivity('AreiTTV on Twitch', { type: 'WATCHING' })
         // truc()
-        if (getObject('TwitterUpdate').enabled === true) updateTwitterInfo();
-        if (getObject('InstagramUpdate').enabled === true) updateInstagramInfo();
-        if (getObject('TwitchUpdate').enabled === true) updateTwitchInfo();
-        if (getObject('TikTokUpdate').enabled === true) updateTikTokInfo();
-        if (getObject('SpotifyUpdate').enabled === true) updateSpotifyInfo();
+        // if (getObject('TwitterUpdate').enabled === true) updateTwitterInfo();
+        // if (getObject('InstagramUpdate').enabled === true) updateInstagramInfo();
+        // if (getObject('TwitchUpdate').enabled === true) updateTwitchInfo();
+        // if (getObject('TikTokUpdate').enabled === true) updateTikTokInfo();
+        // if (getObject('SpotifyUpdate').enabled === true) updateSpotifyInfo();
 	const embed = new EmbedBuilder()
         .setTitle('Redemarrage du bot')
         .setColor(Number(0x5ac18e))
