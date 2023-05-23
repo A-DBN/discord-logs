@@ -27,7 +27,10 @@ module.exports = {
                 embed.setTimestamp()
                 embed.setColor(Number(0xffff00))
         }
-        if (embed.description !== '')
-                client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        try {
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        } catch (error) {
+            console.error(error);
+        }
     }
 }

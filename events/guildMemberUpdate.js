@@ -37,7 +37,10 @@ module.exports = {
             embed.setDescription('Member informations updated')
             embed.setTimestamp()
         }
-        if (embed.description !== '')
+        try {
             client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        } catch (error) {
+            console.error(error);
+        }
     }
 }

@@ -16,8 +16,11 @@ module.exports = {
             .setColor(Number(0xffdf00))
             .setDescription(`${oldMessage.author} updated a message in ${oldMessage.channel}\n\n**Before**\n${oldMessage.content}\n\n**After**\n${newMessage.content}`)	
             .setTimestamp()
-            if (embed.description !== '')
+            try {
                 client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+            } catch (error) {
+                console.error(error);
+            }
         } else { 
             return
         }

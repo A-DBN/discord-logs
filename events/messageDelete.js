@@ -15,8 +15,11 @@ module.exports = {
                 .setDescription(`${message.content}`)
                 .setColor(Number(0xed1c24))
                 .setTimestamp()
-                if (embed.description !== '')
+                try {
                     client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+                } catch (error) {
+                    console.error(error);
+                }
         } else {
             return 
         }

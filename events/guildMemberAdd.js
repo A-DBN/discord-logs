@@ -118,9 +118,10 @@ module.exports = {
         `<@!${member.user.id}> has joined the server!\n\u200b**Nombre total de membre:** ${member.guild.memberCount}`
       )
       .setTimestamp();
-    if (embed.description !== '')
-      client.channels.cache
-        .get(process.env.log_channel_id)
-        .send({ embeds: [embed] });
+      try {
+        client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+      } catch (error) {
+        console.error(error);
+      }
   },
 };
