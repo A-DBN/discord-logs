@@ -31,6 +31,7 @@ module.exports = {
             client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         } catch (error) {
             console.error(error);
+            console.log(embed)
         }
     }
 }
