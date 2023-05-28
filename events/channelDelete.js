@@ -6,7 +6,6 @@ module.exports = {
     name: 'channelDelete',
     on: true,
     execute(channel) {
-        console.log("2")
         if (getObject('channelDelete').enabled === false) return;
         const embed = new EmbedBuilder()
         .setTitle('Channel Deleted')

@@ -5,7 +5,6 @@ const {getObject} = require('../utils/utils.js')
 module.exports = {
     name: 'voiceStateUpdate',
     async execute(oldState, newState) {
-        console.log("5")
         if (getObject('voiceStateUpdate').enabled === false) return;
         const embed = new EmbedBuilder()
         if ((oldState.channelId !== newState.channelId) && newState.channelId === null) {
@@ -26,12 +25,13 @@ module.exports = {
                 embed.setDescription(`**${newState.member.user.tag}** moved from **🔈${oldState.channel.name}** to **🔈${newState.channel.name}**`)
                 embed.setTimestamp()
                 embed.setColor(Number(0xffff00))
+        } else {
+            return
         }
         try {
             client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         } catch (error) {
             console.error(error);
-            console.log(embed)
         }
     }
 }
