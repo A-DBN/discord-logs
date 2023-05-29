@@ -103,7 +103,7 @@ module.exports = {
       ctx.font = 'bold 36px Arial';
       ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'center';
-      ctx.fillText(`Bievenue ${member.user.username}!`, canvas.width / 2, 220);
+      ctx.fillText(`Bienvenue ${member.user.username}!`, canvas.width / 2, 220);
     
   
       const attachment = new AttachmentBuilder(canvas.toBuffer(), 'welcome-image.png');
