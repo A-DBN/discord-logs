@@ -76,7 +76,7 @@ function sendTwitchLiveMessage(channel, access_token) {
 }
 
 async function isLive() {
-    const channel = client.channels.cache.get("980527661422108702");
+    const channel = client.channels.cache.get("980503343661195385");
     const access_token = await getTwitchAccessToken();
     axios.get(`https://api.twitch.tv/helix/streams?user_id=500392653`, {
         headers: {
