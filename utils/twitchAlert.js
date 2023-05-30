@@ -3,22 +3,32 @@ const env = require('dotenv').config()
 const { EmbedBuilder } = require('@discordjs/builders');
 const {getTwitchAccessToken} = require('./auth.js')
 const fs = require('fs')
-// const Twitter = require('twitter')
+const axios = require('axios');
 
-// function sendTweet() {
-//     const client = new Twitter({
-//         consumer_key: process.env.TWITTER_AREI_KEY,
-//         consumer_secret: process.env.TWITTER_AREI_SECRET,
-//         access_token_key: process.env.TWITTER_AREI_TOKEN,
-//         access_token_secret: process.env.TWITTER_AREI_TOKEN_SECRET
-//     });
+function sendTweet() {
+  let data = JSON.stringify({
+    "text": "Je passe en live -> https://twitch.tv/AreiTTV"
+  });
 
-//     client.post('statuses/update', {status: 'Je suis en live sur Twitch -> https://twitch.tv/AreiTTV'}, function(error, tweet, response) {
-//         if (error) {
-//             console.log(error)
-//         }
-//     });
-// }
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://api.twitter.com/2/tweets',
+    headers: { 
+      'Content-Type': 'application/json', 
+      'Authorization': 'OAuth oauth_consumer_key="aJaze52ggHUoLIsfdWIAl4ImA",oauth_token="1111939301347127296-bn9c8Fv8d4ABSrWNifb2RKQnH2euL9",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1685454081",oauth_nonce="KaM6kfE7xCC",oauth_version="1.0",oauth_signature="vHzBGpm6bRmW%2FJlB4YsKteSB08Q%3D"', 
+      'Cookie': 'guest_id=v1%3A168545349441427946'
+    },
+    data : data
+  };
+  axios.request(config)
+  .then((response) => {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 
 function sendTwitchLiveMessage(channel, access_token) {
     const channelUrl = `https://api.twitch.tv/helix/channels?broadcaster_id=500392653`;
@@ -99,7 +109,7 @@ async function isLive() {
         if (data.data.length > 0) {
           if (!idsData.isLive) {
             sendTwitchLiveMessage(channel, access_token);
-            // sendTweet()
+            sendTweet()
             idsData.isLive = true;
             try {
               fs.writeFileSync(storagePath, JSON.stringify(idsData));
