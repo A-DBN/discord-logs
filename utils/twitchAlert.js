@@ -3,7 +3,6 @@ const env = require('dotenv').config()
 const { EmbedBuilder } = require('@discordjs/builders');
 const {getTwitchAccessToken} = require('./auth.js')
 const fs = require('fs')
-const axios = require('axios');
 
 function sendTweet() {
   let data = JSON.stringify({
