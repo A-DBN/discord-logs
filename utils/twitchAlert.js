@@ -7,7 +7,7 @@ const axios = require('axios');
 
 function sendTweet() {
   let data = JSON.stringify({
-    "text": "Je passe en live -> https://twitch.tv/AreiTTV"
+    "text": "Je passe en live ! https://twitch.tv/AreiTTV"
   });
 
   let config = {
