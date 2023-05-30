@@ -16,7 +16,7 @@ function sendTweet() {
     url: 'https://api.twitter.com/2/tweets',
     headers: { 
       'Content-Type': 'application/json', 
-      'Authorization': 'OAuth oauth_consumer_key="aJaze52ggHUoLIsfdWIAl4ImA",oauth_token="1111939301347127296-bn9c8Fv8d4ABSrWNifb2RKQnH2euL9",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1685454081",oauth_nonce="KaM6kfE7xCC",oauth_version="1.0",oauth_signature="vHzBGpm6bRmW%2FJlB4YsKteSB08Q%3D"', 
+      'Authorization': `OAuth oauth_consumer_key="${process.env.TWITTER_AREI_KEY}",oauth_token="${process.env.TWITTER_AREI_TOKEN}",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1685454081",oauth_nonce="KaM6kfE7xCC",oauth_version="1.0",oauth_signature="vHzBGpm6bRmW%2FJlB4YsKteSB08Q%3D"`, 
       'Cookie': 'guest_id=v1%3A168545349441427946'
     },
     data : data
