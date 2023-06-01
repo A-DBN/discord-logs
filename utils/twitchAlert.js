@@ -3,8 +3,38 @@ const env = require('dotenv').config()
 const { EmbedBuilder } = require('@discordjs/builders');
 const {getTwitchAccessToken} = require('./auth.js')
 const fs = require('fs')
+const OAuth = require('oauth-1.0a');
+const crypto = require('crypto');
 
 function sendTweet() {
+
+  const oauth = OAuth({
+    consumer: {
+      key: process.env.TWITTER_AREI_KEY,
+      secret: process.env.TWITTER_AREI_SECRET
+    },
+    signature_method: 'HMAC-SHA1',
+    hash_function(base_string, key) {
+      return crypto
+        .createHmac('sha1', key)
+        .update(base_string)
+        .digest('base64')
+    },
+  })
+
+  const timestamp = Math.floor(Date.now() / 1000);
+  const nonce = oauth.getNonce(32)
+
+  const signature = oauth.generateSignature(
+    requestData,
+    {
+      key: process.env.TWITTER_AREI_TOKEN,
+      secret: process.env.TWITTER_AREI_TOKEN_SECRET
+    }
+  )
+
+  const authHeader = oauth.toHeader(oauth.authorize(requestData, signature))
+
   let data = JSON.stringify({
     "text": "Je passe en live ! https://twitch.tv/AreiTTV"
   });
@@ -15,7 +45,7 @@ function sendTweet() {
     url: 'https://api.twitter.com/2/tweets',
     headers: { 
       'Content-Type': 'application/json', 
-      'Authorization': `OAuth oauth_consumer_key="${process.env.TWITTER_AREI_KEY}",oauth_token="${process.env.TWITTER_AREI_TOKEN}",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1685454081",oauth_nonce="KaM6kfE7xCC",oauth_version="1.0",oauth_signature="vHzBGpm6bRmW%2FJlB4YsKteSB08Q%3D"`, 
+      'Authorization': authHeader.Authorization,
       'Cookie': 'guest_id=v1%3A168545349441427946'
     },
     data : data
