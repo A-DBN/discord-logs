@@ -7,56 +7,79 @@ const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
 
 function sendTweet() {
-
   const oauth = OAuth({
     consumer: {
-      key: process.env.TWITTER_AREI_KEY,
-      secret: process.env.TWITTER_AREI_SECRET
+          key: process.env.TWITTER_AREI_KEY,
+          secret: process.env.TWITTER_AREI_SECRET,
     },
     signature_method: 'HMAC-SHA1',
     hash_function(base_string, key) {
       return crypto
-        .createHmac('sha1', key)
-        .update(base_string)
-        .digest('base64')
+          .createHmac('sha1', key)
+          .update(base_string)
+          .digest('base64');
     },
-  })
+  });
 
   const timestamp = Math.floor(Date.now() / 1000);
-  const nonce = oauth.getNonce(32)
+  const nonce = oauth.getNonce(32);
 
-  const signature = oauth.generateSignature(
-    requestData,
-    {
-      key: process.env.TWITTER_AREI_TOKEN,
-      secret: process.env.TWITTER_AREI_TOKEN_SECRET
-    }
-  )
-
-  const authHeader = oauth.toHeader(oauth.authorize(requestData, signature))
-
-  let data = JSON.stringify({
-    "text": "Je passe en live ! https://twitch.tv/AreiTTV"
-  });
-
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: 'https://api.twitter.com/2/tweets',
-    headers: { 
-      'Content-Type': 'application/json', 
-      'Authorization': authHeader.Authorization,
-      'Cookie': 'guest_id=v1%3A168545349441427946'
-    },
-    data : data
+  const requestData = {
+      url: 'https://api.twitter.com/2/tweets',
+      method: 'POST',
   };
-  axios.request(config)
-  .then((response) => {
-    console.log(JSON.stringify(response.data));
-  })
-  .catch((error) => {
-    console.log(error);
+
+  const token = {
+      key: process.env.TWITTER_AREI_TOKEN,
+      secret: process.env.TWITTER_AREI_SECRET_TOKEN,
+  };
+
+  const signature = oauth.getSignature(requestData, token.secret, {
+      oauth_consumer_key: oauth.consumer.key,
+      oauth_token: token.key,
+      oauth_signature_method: oauth.signature_method,
+      oauth_timestamp: timestamp,
+      oauth_nonce: nonce,
+      oauth_version: '1.0',
   });
+
+  const authHeader = oauth.toHeader({
+      oauth_consumer_key: oauth.consumer.key,
+      oauth_token: token.key,
+      oauth_signature_method: oauth.signature_method,
+      oauth_timestamp: timestamp,
+      oauth_nonce: nonce,
+      oauth_version: '1.0',
+      oauth_signature: signature,
+  });
+
+  const headers = {
+      Authorization: authHeader['Authorization'],
+  };
+
+  const data = JSON.stringify({
+      text: 'Je passe en live ! https://twitch.tv/AreiTTV',
+  });
+
+  const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: requestData.url,
+      headers: {
+          'Content-Type': 'application/json',
+          ...headers,
+          Cookie: 'guest_id=v1%3A168545349441427946',
+      },
+      data: data,
+  };
+
+  axios
+      .request(config)
+      .then((response) => {
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 }
 
 function sendTwitchLiveMessage(channel, access_token) {
