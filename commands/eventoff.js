@@ -11,8 +11,6 @@ const choices = events.events
     value: event.value
   }));
 
-// console.log(...choices)
-
 module.exports = {
         data: new SlashCommandBuilder()
             .setName('eventoff')

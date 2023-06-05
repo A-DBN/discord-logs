@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { ButtonStyle, EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js')
+const fs = require('fs')
 
 
 let players = []
@@ -51,5 +52,6 @@ module.exports = {
             buttonsRow.addComponents([join, leave]);
 
             interaction.reply({ embeds: [embedBuilder], components: [buttonsRow] });
+            interaction.deleteReply({setTimeout: 60 * 30 * 1000})
         }
 }

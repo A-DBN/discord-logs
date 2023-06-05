@@ -6,7 +6,9 @@ const fs = require('fs')
 const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
 
-function sendTweet() {
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+function setupRequest() {
   const oauth = OAuth({
     consumer: {
           key: process.env.TWITTER_AREI_KEY,
@@ -23,11 +25,6 @@ function sendTweet() {
 
   const timestamp = Math.floor(Date.now() / 1000);
   const nonce = oauth.getNonce(32);
-
-  const requestData = {
-      url: 'https://api.twitter.com/2/tweets',
-      method: 'POST',
-  };
 
   const token = {
       key: process.env.TWITTER_AREI_TOKEN,
@@ -57,6 +54,50 @@ function sendTweet() {
       Authorization: authHeader['Authorization'],
   };
 
+  return headers
+}
+
+function deleteTweet() {
+
+  const data = fs.readFileSync('./Stockage/ids.json', 'utf8', function (err, data) {
+    if (err) throw err;
+  })
+
+  const tweetId = JSON.parse(data).tweetId
+  const requestData = {
+    url: `https://api.twitter.com/2/tweets/${tweetId}`,
+    method: 'DELETE',
+  }
+
+  const headers = setupRequest(requestData)
+
+  const config = {
+      method: 'delete',
+      maxBodyLength: Infinity,
+      url: requestData.url,
+      headers: {
+          'Content-Type': 'application/json',
+          ...headers,
+      }
+  }
+
+  axios(config)
+  .catch(error => {
+    console.log(error)
+  })
+}
+
+function sendTweet() {
+  const dt = fs.readFileSync('./Stockage/ids.json', 'utf8')
+  let ids = JSON.parse(dt)
+
+  const requestData = {
+    url: 'https://api.twitter.com/2/tweets',
+    method: 'POST',
+  };
+
+  const headers = setupRequest(requestData);
+
   const data = JSON.stringify({
       text: 'Je passe en live ! https://twitch.tv/AreiTTV',
   });
@@ -68,18 +109,26 @@ function sendTweet() {
       headers: {
           'Content-Type': 'application/json',
           ...headers,
-          Cookie: 'guest_id=v1%3A168545349441427946',
       },
       data: data,
   };
 
-  axios
-      .request(config)
-      .then((response) => {
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  axios(config)
+  .then(response => {
+    const id = response.data.data.id;
+    ids.tweetId = id;
+    fs.writeFileSync(
+      './Stockage/ids.json',
+      JSON.stringify(ids, null, 4),
+      function (err) {
+        if (err) console.log(err);
+      }
+    );
+  })
+  .catch(error => {
+    console.log(error)
+  })
+
 }
 
 function sendTwitchLiveMessage(channel, access_token) {
@@ -146,7 +195,7 @@ async function isLive() {
             'Authorization': `Bearer ${access_token}`
         }
       })
-      .then(response => {
+      .then(async response => {
         const data = response.data;
         const storagePath = './Stockage/ids.json';
         let idsData = {};
@@ -161,6 +210,8 @@ async function isLive() {
         if (data.data.length > 0) {
           if (!idsData.isLive) {
             sendTwitchLiveMessage(channel, access_token);
+            if (idsData.tweetId !== "") deleteTweet()
+            await delay(3000)
             sendTweet()
             idsData.isLive = true;
             try {
