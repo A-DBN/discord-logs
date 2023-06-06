@@ -8,7 +8,7 @@ const crypto = require('crypto');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-function setupRequest() {
+function setupRequest(requestData) {
   const oauth = OAuth({
     consumer: {
           key: process.env.TWITTER_AREI_KEY,
@@ -209,16 +209,16 @@ async function isLive() {
   
         if (data.data.length > 0) {
           if (!idsData.isLive) {
-            sendTwitchLiveMessage(channel, access_token);
-            if (idsData.tweetId !== "") deleteTweet()
-            await delay(3000)
-            sendTweet()
-            idsData.isLive = true;
             try {
               fs.writeFileSync(storagePath, JSON.stringify(idsData));
             } catch (error) {
               console.error(error);
             }
+            sendTwitchLiveMessage(channel, access_token);
+            if (idsData.tweetId !== "") deleteTweet()
+            await delay(3000)
+            sendTweet()
+            idsData.isLive = true;
           }
         } else {
           if (idsData.isLive) {
