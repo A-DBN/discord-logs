@@ -64,6 +64,7 @@ function deleteTweet() {
   })
 
   const tweetId = JSON.parse(data).tweetId
+  if (!tweetId) return undefined
   const requestData = {
     url: `https://api.twitter.com/2/tweets/${tweetId}`,
     method: 'DELETE',
@@ -209,6 +210,7 @@ async function isLive() {
   
         if (data.data.length > 0) {
           if (!idsData.isLive) {
+            idsData.isLive = true;
             try {
               fs.writeFileSync(storagePath, JSON.stringify(idsData));
             } catch (error) {
@@ -218,7 +220,6 @@ async function isLive() {
             if (idsData.tweetId !== "") deleteTweet()
             await delay(3000)
             sendTweet()
-            idsData.isLive = true;
           }
         } else {
           if (idsData.isLive) {
