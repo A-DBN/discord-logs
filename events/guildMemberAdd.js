@@ -16,13 +16,13 @@ module.exports = {
       const followerRoleId = "1104681838997422080"; // your follower role ID
 
       const regex = /^[a-zA-Z0-9]+$/;
-      if (!regex.test(twitchUsername)) {
-        console.log(`User ${twitchUsername} does not match the regex.`);
-        member.send(
-          `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
-          );
-        return;
-      }
+      // if (!regex.test(twitchUsername)) {
+      //   console.log(`User ${twitchUsername} does not match the regex.`);
+      //   member.send(
+      //     `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
+      //     );
+      //   return;
+      // }
 
       const access_token = await getTwitchAccessToken();
 
@@ -37,13 +37,13 @@ module.exports = {
           }
         );
 
-        if (twitchResponse.data.data.length === 0) {
-          console.log(`User ${twitchUsername} does not exist on Twitch.`);
-          member.send(
-              `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
-              );
-          return;
-        }
+        // if (twitchResponse.data.data.length === 0) {
+        //   console.log(`User ${twitchUsername} does not exist on Twitch.`);
+        //   member.send(
+        //       `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
+        //       );
+        //   return;
+        // }
 
         const twitchUserId = twitchResponse.data.data[0].id;
 
@@ -64,11 +64,11 @@ module.exports = {
           console.log(
             `User ${twitchUsername} is now a follower and has been granted the follower role.`
           );
-        } else {
-          console.log(`User ${twitchUsername} is not a follower.`);
-          member.send(
-            `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
-          );
+        // } else {
+        //   console.log(`User ${twitchUsername} is not a follower.`);
+        //   member.send(
+        //     `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
+        //   );
         }
       } catch (error) {
         console.error(error);
