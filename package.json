@@ -24,7 +24,7 @@
     "instagram-private-api": "^1.45.3",
     "lodash": "^4.17.21",
     "node-cron": "^3.0.2",
-    "nodemon": "^2.0.16",
+    "nodemon": "^2.0.22",
     "oauth-1.0a": "^2.2.6",
     "open": "^9.1.0",
     "puppeteer": "^20.1.2",
