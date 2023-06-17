@@ -10,7 +10,7 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setTitle('Role Created')
         .setColor(Number(0x5ac18e))
-        .setAuthor(role.client.user.tag, role.client.user.displayAvatarURL())
+        .setAuthor({name: role.client.user.username, iconURL:role.client.user.displayAvatarURL()})
         .setDescription(`Role **${role.name}** was created`)
         .setTimestamp()
         if (embed.description !== '')

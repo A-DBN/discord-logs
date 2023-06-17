@@ -11,7 +11,7 @@ module.exports = {
         if (oldMessage.channel.id !== process.env.log_channel_id && !oldMessage.author.bot && oldMessage.content !== newMessage.content) {
             const embed = new EmbedBuilder()
             .setTitle(`Message Updated in #${newMessage.channel.name}`)
-            .setAuthor({name: newMessage.author.tag, iconURL:newMessage.author.displayAvatarURL()})
+            .setAuthor({name: newMessage.author.username, iconURL:newMessage.author.displayAvatarURL()})
             .setColor(Number(0xffdf00))
             .setDescription(`${oldMessage.author} updated a message in ${oldMessage.channel}\n\n**Before**\n${oldMessage.content}\n\n**After**\n${newMessage.content}`)	
             .setTimestamp()

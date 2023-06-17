@@ -37,14 +37,14 @@ module.exports = {
         //     if (embed.description)
         //         client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         // } else {
-        //     const embed = new EmbedBuilder()
-        //     .setTitle('Member Removed')
-        //     .setColor(Number(0xffdf00))
-        //     .setDescription(`**${member.user.tag}** was kicked`)
-        //     .setThumbnail(member.user.displayAvatarURL())
-        //     .setTimestamp()
-        //     if (embed.description)
-        //         client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
+        const embed = new EmbedBuilder()
+        .setTitle('Member Removed')
+        .setColor(Number(0xffdf00))
+        .setDescription(`**${member.user.username}** left the server`)
+        .setThumbnail(member.user.displayAvatarURL())
+        .setTimestamp()
+        if (embed.description)
+            client.channels.cache.get(process.env.log_channel_id).send({embeds: [embed]});
         // }
 
         const canvas = Canvas.createCanvas(700, 250);

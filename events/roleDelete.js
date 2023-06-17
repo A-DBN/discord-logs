@@ -10,7 +10,7 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setTitle('Role Deleted')
         .setColor(Number(0xed1c24))
-        .setAuthor(role.client.user.tag, role.client.user.displayAvatarURL())
+        .setAuthor({name: role.client.user.username, iconURL:role.client.user.displayAvatarURL()})
         .setDescription(`Role **${role.name}** was deleted`)
         .setTimestamp()
         if (embed.description !== '')

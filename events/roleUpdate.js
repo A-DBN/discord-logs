@@ -11,7 +11,7 @@ module.exports = {
             const embed = new EmbedBuilder()
             .setTitle('Role Updated')
             .setColor(Number(0xffdf00))
-            .setAuthor(newRole.client.user.tag, newRole.client.user.displayAvatarURL())
+            .setAuthor({name: newRole.client.user.username, iconURL:newRole.client.user.displayAvatarURL()})
             .setDescription(`Role **${oldRole.name}** was updated to **${newRole.name}**`)
             .setTimestamp()
             if (embed.description !== '')

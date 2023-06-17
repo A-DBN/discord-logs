@@ -10,7 +10,7 @@ module.exports = {
         if (message.channel.id !== process.env.log_channel_id && !message.author.bot) {
             const embed = new EmbedBuilder()
                 .setTitle(`Message Deleted in #${message.channel.name}`)
-                .setAuthor({name: message.author.tag, iconURL:message.author.displayAvatarURL()})
+                .setAuthor({name: message.author.username, iconURL:message.author.displayAvatarURL()})
                 .setDescription(`${message.content}`)
                 .setColor(Number(0xed1c24))
                 .setTimestamp()
