@@ -10,13 +10,13 @@ module.exports = {
         if ((oldState.channelId !== newState.channelId) && newState.channelId === null) {
                 embed.setTitle('Member left voice channel')
                 embed.setAuthor({name: newState.member.user.username, iconURL:newState.member.user.displayAvatarURL()})
-                embed.setDescription(`**${oldState.member.user.tag}** left 🔈${oldState.channel.name}`)
+                embed.setDescription(`**${oldState.member.user.username}** left 🔈${oldState.channel.name}`)
                 embed.setTimestamp()
                 embed.setColor(Number(0xff0000))
         } else if (oldState.channelId === null && newState.channelId !== null) {
                 embed.setTitle('Member joined voice channel')
                 embed.setAuthor({name: newState.member.user.username, iconURL:newState.member.user.displayAvatarURL()})
-                embed.setDescription(`**${newState.member.user.tag}** joined 🔈${newState.channel.name}`)
+                embed.setDescription(`**${newState.member.user.username}** joined 🔈${newState.channel.name}`)
                 embed.setTimestamp()
                 embed.setColor(Number(0x00ff00))
         } else if ((oldState.channelId !== newState.channelId) && (newState.channelId !== null) && (oldState.channelId !== null)) {
