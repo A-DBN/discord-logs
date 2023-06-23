@@ -5,8 +5,8 @@ module.exports = {
     name: 'messageCreate',
     on: true,
     async execute(message) {
-        message.delete()
         if (message.content.toLowerCase().startsWith("!ano") && message.attachments.size > 0) {
+            message.delete()
             const title = message.content.split(' ').slice(1).join(' ')
             const attachment = message.attachments.first()
             const imageUrl = attachment.url
