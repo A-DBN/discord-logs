@@ -5,10 +5,11 @@ module.exports = {
     name: 'messageCreate',
     on: true,
     async execute(message) {
+        message.delete()
         if (message.content.toLowerCase().startsWith("!ano") && message.attachments.size > 0) {
+            const title = message.content.split(' ').slice(1).join(' ')
             const attachment = message.attachments.first()
             const imageUrl = attachment.url
-            message.delete()
 
             try {
                 const image = await loadImage(imageUrl);
@@ -18,7 +19,7 @@ module.exports = {
                 cx.drawImage(image, 0, 0)
 
                 const attachmentBuffer = canvas.toBuffer('image/png')
-                message.channel.send({ files: [attachmentBuffer] });
+                title === "" ? message.channel.send({ files: [attachmentBuffer] }) : message.channel.send({content: title, files: [attachmentBuffer]});
             } catch (error) {
                 console.error(error)
                 message.reply("Une erreur est survenue")
