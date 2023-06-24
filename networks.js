@@ -106,14 +106,14 @@ async function updateTikTokInfo() {
   
     const embed = new EmbedBuilder()
     .setColor(Number(0xEE1D52))
-    .setAuthor({name:username, iconURL: profileImage, url:`https://www.tiktok.com/@${tiktokUsername}`})
+    .setAuthor({name:username, iconURL: profileImage, url:`https://www.tiktok.com/${tiktokUsername}`})
     .addFields(
       {name:'Followers', value:followers.toLocaleString(), inline:true},
       {name:'Total likes', value:likes.toLocaleString(), inline:true}
     )
-    .setURL(`https://www.tiktok.com/@${tiktokUsername}`)
+    .setURL(`https://www.tiktok.com/${tiktokUsername}`)
     .setThumbnail(profileImage)
-    .setFooter({text:'@areittv on TikTok', iconURL:'https://i.imgur.com/OT2nXJG.png'})
+    .setFooter({text:`@areittv on TikTok`, iconURL:'https://i.imgur.com/OT2nXJG.png'})
 
       let ids = { channelId: null, instagramEmbedId: null };
       try {
