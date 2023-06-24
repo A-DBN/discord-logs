@@ -7,7 +7,7 @@ module.exports = {
     on: true,
     execute(message) {
         if (getObject('messageDelete').enabled === false) return;
-        if (message.channel.id !== process.env.log_channel_id && !message.author.bot && message.content.toLowerCase().startsWith('!ano')) {
+        if (message.channel.id !== process.env.log_channel_id && !message.author.bot && !message.content.toLowerCase().startsWith('!ano')) {
             const embed = new EmbedBuilder()
                 .setTitle(`Message Deleted in #${message.channel.name}`)
                 .setAuthor({name: message.author.username, iconURL:message.author.displayAvatarURL()})
