@@ -40,7 +40,7 @@ async function updateSpotifyInfo() {
   //   });
   try {
     const URL = "https://open.spotify.com/user/izbhsh9rxqf0darc2stcap265"
-    const browser = await puppeteer.launch({headless: "new" });
+    const browser = await puppeteer.launch({headless: "new", executablePath: '/usr/bin/chromium-browser' });
 
     const page = await browser.newPage();
 
