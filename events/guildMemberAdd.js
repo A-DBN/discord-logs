@@ -37,13 +37,13 @@ module.exports = {
           }
         );
 
-        // if (twitchResponse.data.data.length === 0) {
-        //   console.log(`User ${twitchUsername} does not exist on Twitch.`);
-        //   member.send(
-        //       `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
-        //       );
-        //   return;
-        // }
+        if (twitchResponse.data.data.length === 0) {
+          // console.log(`User ${twitchUsername} does not exist on Twitch.`);
+          // member.send(
+          //     `Salut, Je n'ai pas pu te trouver parmis les followers twitch de AreiTTV. Si tu es bien follow, tape la commande /linktwitch <ton_nom_twitch> dans le channel command_bot sur le serveur discord de AreiTTV.`
+          //     );
+          return;
+        }
 
         const twitchUserId = twitchResponse.data.data[0].id;
 
