@@ -5,7 +5,12 @@ module.exports = {
   name: 'messageCreate',
   on: true,
   async execute(message) {
-    if (message.content.toLowerCase().startsWith('!ano') && message.attachments.size > 0) {
+    if (message.author.bot) return;
+    if (message.content.startsWith('!maso')) {
+      message.delete()
+      message.channel.send({files: ["../assets/maso.mp4"]})
+    } else if (message.author.id === '655815335257178125' && message.content.contains('maso')) message.reply({files: ["../assets/maso.mp4"]})
+    else if (message.content.toLowerCase().startsWith('!ano') && message.attachments.size > 0) {
       message.delete();
       const title = message.content.split(' ').slice(1).join(' ');
       const attachments = Array.from(message.attachments.values());
