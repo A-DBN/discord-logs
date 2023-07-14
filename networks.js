@@ -52,6 +52,11 @@ async function updateSpotifyInfo() {
     const public = await page.$eval('#main > div > div.ZQftYELq0aOsg6tPbVbV > div.jEMA2gVoLgPQqAFrPhFw.lPapCDz3v_LipgXwe8gi > div.main-view-container > div.os-host.os-host-foreign.os-theme-spotify.os-host-resize-disabled.os-host-scrollbar-horizontal-hidden.main-view-container__scroll-node.os-host-transition.os-host-overflow.os-host-overflow-y > div.os-padding > div > div > div.main-view-container__scroll-node-child > main > section > div > div.contentSpacing.NXiYChVp4Oydfxd7rT5r.RMDSGDMFrx8eXHpFphqG > div.RP2rRchy4i8TIp1CTmb7 > div > span:nth-child(1)', el => el.innerText);
     await browser.close();
 
+    if ([displayName, followers, profile_picture, public].includes(undefined)) {
+      console.error(`Error while fetching Spotify data for ${URL}`);
+      return;
+    }
+
     const embed = new EmbedBuilder()
       .setColor(Number(0x1DB954))
       .setAuthor({name: displayName, iconURL:profile_picture, url:URL})
@@ -301,6 +306,11 @@ async function updateTwitterInfo() {
       twitterClient.get('users/show', params),
       twitterClient.get('statuses/user_timeline', params)
     ]);
+
+    if ([user, tweets].some(response => response.errors)) {
+      console.error(`Error while updating Twitter info: ${JSON.stringify([user, tweets].filter(response => response.errors))}`);
+      return;
+    }
 
     const embed = new EmbedBuilder()
       .setColor(Number(0x1DA1F2))
