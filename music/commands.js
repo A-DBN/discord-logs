@@ -135,7 +135,7 @@ async function remove(interaction, client) {
  * @param {Interaction} interaction 
  * @param {Client} client 
  */
-async function playRandom(interaction, client) {
+async function playrandom(interaction, client) {
     const link = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley'
     client.DisTube.play(interaction.member.voice.channel, link, {
         textChannel: interaction.channel,
@@ -167,6 +167,6 @@ module.exports = {
     unloop,
     volume,
     remove,
-    playRandom,
+    playrandom,
     shuffle
 }
