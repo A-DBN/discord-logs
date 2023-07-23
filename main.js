@@ -6,6 +6,7 @@ const path = require('node:path');
 const {isLive} = require('./utils/twitchAlert.js')
 const {getObject} = require('./utils/utils.js')
 const {updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo, updateSpotifyInfo } = require('./networks.js');
+const {DisTube} = require('distube')
 
 // Create a new client instance
 const client = new Client({ 
@@ -27,6 +28,8 @@ const client = new Client({
 		}
 	}
 });
+
+client.DisTube = new DisTube(client, {emitNewSongOnly: true, leaveOnFinish: true, leaveOnEmpty: true, leaveOnStop: true })
 
 //make client global
 global.client = client;
@@ -67,6 +70,10 @@ for (const file of commandFiles) {
 setInterval(async () => {
 	if (getObject('TwitchLiveAlert').enabled === true) isLive();
   }, 1000 * 60 * 3);
+
+  client.DisTube.on("playSong", (queue, song) => {
+	queue.textChannel.send("Playing " + song.name + " - " + song.formattedDuration + " | Requested by: " + song.user.tag)
+  })
   
 
 cron.schedule('0 0 * * *', () => {

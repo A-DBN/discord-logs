@@ -102,7 +102,6 @@ async function updateTikTokInfo() {
     let page = await browser.newPage();
     await page.goto('http://tiktok.com/' + tiktokUsername);
     await page.waitForSelector('div[data-e2e="user-post-item"] a');
-    // parse user data
     let followers = await(await page.$('strong[data-e2e=followers-count]')).evaluate(node => node.innerText); 
     let likes = await(await page.$('strong[data-e2e=likes-count]')).evaluate(node => node.innerText); 
     let profileImage = await page.$eval('#main-content-others_homepage > div > div.tiktok-1g04lal-DivShareLayoutHeader-StyledDivShareLayoutHeaderV2.enm41492 > div.tiktok-1gk89rh-DivShareInfo.ekmpd5l2 > div.tiktok-uha12h-DivContainer.e1vl87hj1 > span > img', img => img.getAttribute('src'));
@@ -274,7 +273,6 @@ async function updateInstagramInfo() {
 }
 
 async function updateTwitterInfo() {
-  // Twitter API OAuth 2.0 authentication
   const authOptions = {
     method: 'POST',
     url: 'https://api.twitter.com/oauth2/token',
@@ -295,7 +293,6 @@ async function updateTwitterInfo() {
       bearer_token: bearerToken
     });
 
-    // Replace "TWITTER_USERNAME" with your Twitter username
     const params = {
       screen_name: 'AreiTTV',
       include_entities: true,
