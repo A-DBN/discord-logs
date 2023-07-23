@@ -1,3 +1,4 @@
+const {EmbedBuilder} = require('@discordjs/builders')
 
 /**
  * Play the music given, can be either a link or a name (Youtube only)
@@ -135,7 +136,7 @@ async function remove(interaction, client) {
  * @param {Client} client 
  */
 async function playRandom(interaction, client) {
-    const link = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    const link = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley'
     client.DisTube.play(interaction.member.voice.channel, link, {
         textChannel: interaction.channel,
         member: interaction.member,
