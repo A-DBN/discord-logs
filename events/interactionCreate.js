@@ -3,9 +3,9 @@ const { Events, InteractionType } = require('discord.js');
 const env = require ('dotenv').config()
 const _ = require('lodash')
 const { updateEmbed } = require('../utils/team.js');
+const axios = require('axios');
 
 function handleButton(interaction) {
-    console.log("je passe dedans ?")
     const roleName = interaction.customId;
     const role = interaction.guild.roles.cache.find(role => role.name === roleName);
 
@@ -84,6 +84,61 @@ async function handleAutoComplete(interaction) {
     }
 }
 
+async function linkTwitch(interaction) {
+    const followerRoleId = '1109027482075668481';
+    const member = interaction.member;
+    const twitchUsername = interaction.fields.getTextInputValue('username');
+
+    if (member.roles.cache.has(followerRoleId)) {
+      return interaction.reply({ content: 'Tu as déjà le rôle Follower', ephemeral: true });
+    }
+
+    const clientId = process.env.TWITCH_CLIENT_ID;
+    const clientSecret = process.env.TWITCH_CLIENT_SECRET;
+    const username = 'areittv';
+  
+    // Generate access token
+    const params = new URLSearchParams();
+    params.append('client_id', clientId);
+    params.append('client_secret', clientSecret);
+    params.append('grant_type', 'client_credentials');
+    params.append('scope', 'user:read:email');
+  
+    const { data: { access_token } } = await axios.post(`https://id.twitch.tv/oauth2/token`, params);
+
+    try {
+      const twitchResponse = await axios.get(`https://api.twitch.tv/helix/users?login=${twitchUsername}`, {
+        headers: {
+          'Client-ID': process.env.TWITCH_CLIENT_ID,
+          'Authorization': `Bearer ${access_token}`
+        }
+      });
+      if (twitchResponse.data.data.length === 0) {
+        return interaction.reply({ content: 'Cet utilisateur n\'existe pas si tu penses que c\'est une erreur tag @\\zenkiud.', ephemeral: true });
+      }
+      const twitchUserId = twitchResponse.data.data[0].id;
+
+      const followsResponse = await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${process.env.CASCA_CHANNEL_ID}&from_id=${twitchUserId}`, {
+        headers: {
+          'Client-ID': process.env.TWITCH_CLIENT_ID,
+          'Authorization': `Bearer ${access_token}`
+        }
+      });
+      
+      const isFollowing = followsResponse.data.total > 0;
+      
+      if (isFollowing) {
+        member.roles.add(followerRoleId);
+        return interaction.reply({ content: 'Félicitations, Tu as maintenant le rôle Follower', ephemeral: true });
+      } else {
+        return interaction.reply({ content: 'Tu dois être follow à la chaine afin d\'obtenir le rôle !', ephemeral: true });
+      }
+    } catch (error) {
+      console.error(error);
+      return interaction.reply({ content: 'Une erreur est survenue, tag @\\zenkiud si le problème persiste', ephemeral: true });
+    }
+}
+
 module.exports = {
     name: Events.InteractionCreate,
     on: true,
@@ -103,6 +158,8 @@ module.exports = {
             }
         } else if (interaction.isAutocomplete()){
             await handleAutoComplete(interaction)
+        } else if (interaction.isModalSubmit()) {
+            linkTwitch(interaction)
         }
     }
 }
