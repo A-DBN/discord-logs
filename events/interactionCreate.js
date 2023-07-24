@@ -3,7 +3,7 @@ const { Events, InteractionType } = require('discord.js');
 const env = require ('dotenv').config()
 const _ = require('lodash')
 const { updateEmbed } = require('../utils/team.js');
-const axios = require('axios');
+const axios = require('axios')
 
 function handleButton(interaction) {
     const roleName = interaction.customId;
@@ -85,7 +85,7 @@ async function handleAutoComplete(interaction) {
 }
 
 async function linkTwitch(interaction) {
-    const followerRoleId = '1109027482075668481';
+    const followerRoleId = '1104681838997422080';
     const member = interaction.member;
     const twitchUsername = interaction.fields.getTextInputValue('username');
 
