@@ -35,7 +35,7 @@ client.DisTube.on("addList", (queue, playlist) => {
         )
         .setImage(playlist.thumbnail)
         .setTimestamp()
-    interactionQueue.delete(queue.textChannel.id);
+    interactionQueue.delete(interaction.id);
     return interaction.reply({embeds: [embed]});
 })
 
@@ -52,7 +52,7 @@ client.DisTube.on("addSong", (queue, song) => {
             {name: '**Requested by**: ', value: song.user.username, inline: false}
         )
         .setTimestamp()
-    interactionQueue.delete(queue.textChannel.id);
+    interactionQueue.delete(interaction.id);
     return interaction.reply({embeds: [embed]});
 })
 
