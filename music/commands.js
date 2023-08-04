@@ -1,6 +1,8 @@
 const {EmbedBuilder} = require('@discordjs/builders')
 const {setColor} = require('../utils/utils.js');
 
+const interactionQueue = new Map();
+
 client.DisTube.on("playSong", (queue, song) => {
     const embed = new EmbedBuilder()
         .setTitle(`Playing ${song.name}`)
@@ -17,10 +19,28 @@ client.DisTube.on("playSong", (queue, song) => {
 })
 
 client.DisTube.on("error", (channel, error) => {
-	return channel.send(`An error encountered: ${error}`)
+	console.log(error)
+})
+
+client.DisTube.on("addList", (queue, playlist) => {
+    const interaction = interactionQueue.values().next().value;
+    const embed = new EmbedBuilder()
+        .setTitle(`Adding ${playlist.name} to the queue`)
+        .setURL(playlist.url)
+        .setAuthor({name: playlist.user.username, iconURL:playlist.user.displayAvatarURL()})
+        .setColor(setColor())
+        .addFields(
+            {name: '**Duration**: ', value: playlist.formattedDuration, inline: true},
+            {name: '**Requested by**: ', value: playlist.user.username, inline: true}
+        )
+        .setImage(playlist.thumbnail)
+        .setTimestamp()
+    interactionQueue.delete(queue.textChannel.id);
+    return interaction.reply({embeds: [embed]});
 })
 
 client.DisTube.on("addSong", (queue, song) => {
+    const interaction = interactionQueue.values().next().value;
     const embed = new EmbedBuilder()
         .setTitle(`Adding ${song.name} to the queue`)
         .setURL(song.url)
@@ -32,9 +52,9 @@ client.DisTube.on("addSong", (queue, song) => {
             {name: '**Requested by**: ', value: song.user.username, inline: false}
         )
         .setTimestamp()
-    queue.textChannel.send({embeds: [embed]});
+    interactionQueue.delete(queue.textChannel.id);
+    return interaction.reply({embeds: [embed]});
 })
-
 
 /**
  * Play the music given, can be either a link or a name (Youtube only)
@@ -43,6 +63,7 @@ client.DisTube.on("addSong", (queue, song) => {
  */
 async function play(interaction, client) {
     const link = interaction.options.getString('link')
+    interactionQueue.set(interaction.id, interaction);
     client.DisTube.play(interaction.member.voice.channel, link, {
         textChannel: interaction.channel,
         member: interaction.member,
@@ -106,7 +127,7 @@ async function queue(interaction, client) {
         .addFields({ name: 'Current song', value: queue.songs[0].name, inline: false })
         .addFields({
             name: 'Next songs',
-            value: queue.songs.slice(1, 21).map((song, id) => `**${id + 1}**. ${song.name} - \`${song.formattedDuration}\``).join('\n'),
+            value: queue.songs.slice(1, 15).map((song, id) => `**${id + 1}**. ${song.name} - \`${song.formattedDuration}\``).join('\n'),
             inline: false
         });
     await interaction.reply({ embeds: [embed], ephemeral: true});
