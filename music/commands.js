@@ -1,4 +1,40 @@
 const {EmbedBuilder} = require('@discordjs/builders')
+const {setColor} = require('../utils/utils.js');
+
+client.DisTube.on("playSong", (queue, song) => {
+    const embed = new EmbedBuilder()
+        .setTitle(`Playing ${song.name}`)
+        .setURL(song.url)
+        .setAuthor({name: song.user.username, iconURL:song.user.displayAvatarURL()})
+        .addFields(
+            {name: '**Duration**: ', value: song.formattedDuration, inline: true},
+            {name: '**Requested by**: ', value: song.user.username, inline: true}
+        )
+        .setImage(song.thumbnail)
+        .setColor(setColor())
+        .setTimestamp()
+    queue.textChannel.send({embeds: [embed]});
+})
+
+client.DisTube.on("error", (channel, error) => {
+	return channel.send(`An error encountered: ${error}`)
+})
+
+client.DisTube.on("addSong", (queue, song) => {
+    const embed = new EmbedBuilder()
+        .setTitle(`Adding ${song.name} to the queue`)
+        .setURL(song.url)
+        .setAuthor({name: song.user.username, iconURL:song.user.displayAvatarURL()})
+        .setColor(setColor())
+        .addFields(
+            {name: '**Author**: ', value: song.uploader.name, inline: true},
+            {name: '**Duration**: ', value: song.formattedDuration, inline: true},
+            {name: '**Requested by**: ', value: song.user.username, inline: false}
+        )
+        .setTimestamp()
+    queue.textChannel.send({embeds: [embed]});
+})
+
 
 /**
  * Play the music given, can be either a link or a name (Youtube only)
@@ -12,7 +48,6 @@ async function play(interaction, client) {
         member: interaction.member,
         interaction
     })
-    await interaction.reply({ content: `Added ${link} to queue`, ephemeral: true})
 }
 
 
@@ -63,11 +98,10 @@ async function skip(interaction, client) {
  */
 async function queue(interaction, client) {
     const queue = client.DisTube.getQueue(interaction);
-    console.log(queue.songs.slice(1))
     if (queue.songs.slice(1).length === 0) return await interaction.reply({ content: `No queue`, ephemeral: true});
     const embed = new EmbedBuilder()
         .setTitle('Queue')
-        .setColor(0x00ff00)
+        .setColor(setColor())
         .setTimestamp()
         .addFields({ name: 'Current song', value: queue.songs[0].name, inline: false })
         .addFields({

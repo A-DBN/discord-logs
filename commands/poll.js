@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders')
-const { isJSONEncodable } = require('discord.js')
+const {setColor} = require('../utils/utils.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -26,7 +26,7 @@ module.exports = {
 
             try {
                 const embed = new EmbedBuilder()
-                  .setColor(0x18e1ee)
+                  .setColor(setColor())
                   .setAuthor({name:user.username, iconURL:user.displayAvatarURL(), url:user.displayAvatarURL()})
                   .setTitle(`${question}`)
                   .addFields(

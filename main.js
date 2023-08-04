@@ -71,11 +71,6 @@ setInterval(async () => {
 	if (getObject('TwitchLiveAlert').enabled === true) isLive();
   }, 1000 * 60 * 3);
 
-  client.DisTube.on("playSong", (queue, song) => {
-	queue.textChannel.send("Playing " + song.name + " - " + song.formattedDuration + " | Requested by: " + song.user.tag)
-  })
-  
-
 cron.schedule('0 0 * * *', () => {
 	if (getObject('TwitterUpdate').enabled === true) updateTwitterInfo();
 	if (getObject('InstagramUpdate').enabled === true) updateInstagramInfo();

@@ -15,7 +15,7 @@
     "@discordjs/opus": "^0.9.0",
     "@discordjs/rest": "^1.7.1",
     "@discordjs/voice": "^0.16.0",
-    "@distube/ytdl-core": "^4.11.14",
+    "@distube/ytdl-core": "^4.11.16",
     "@google-cloud/speech": "^5.6.0",
     "axios": "^1.4.0",
     "canvas": "^2.11.2",
@@ -23,8 +23,9 @@
     "crypto": "^1.0.1",
     "discord-api-types": "^0.33.0",
     "discord.js": "14.10.2",
-    "distube": "^4.0.5",
+    "distube": "^4.0.6",
     "dotenv": "^8.2.0",
+    "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^5.1.0",
     "fs": "^0.0.1-security",
     "instagram-private-api": "^1.45.3",
@@ -33,11 +34,10 @@
     "nodemon": "^2.0.16",
     "oauth-1.0a": "^2.2.6",
     "open": "^9.1.0",
-    "openai": "^3.3.0",
     "puppeteer": "^20.1.2",
-    "r2": "^2.0.1",
     "twitter": "^1.7.1",
     "twitter-api-v2": "^1.14.3",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "ytdl-core": "^4.11.5"
   }
 }

@@ -19,6 +19,7 @@ module.exports = {
             .addSubcommand(subcommand => subcommand.setName('playrandom').setDescription('Play random music'))
             .addSubcommand(subcommand => subcommand.setName('shuffle').setDescription('Shuffle queue')),
         execute: async (interaction) => {
+            if (!interaction.member.voice.channel) return interaction.reply({ content: 'Tu dois être présent dans un vocal pour utiliser cette commande', ephemeral: true})
             const subcommand = interaction.options.getSubcommand()
             try {
                 // Call the function from the music folder with the same name as the subcommand
