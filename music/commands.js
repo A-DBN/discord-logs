@@ -129,7 +129,7 @@ async function pause(interaction, client) {
  */
 async function resume(interaction, client) {
     client.DisTube.resume(interaction)
-    await interaction.reply({ content: `Resumed`, ephemeral: true})
+    await interaction.reply({ content: `Resuming song`})
 }
 
 /**
@@ -139,7 +139,7 @@ async function resume(interaction, client) {
  */
 async function stop(interaction, client) {
     client.DisTube.stop(interaction)
-    await interaction.reply({ content: `Stopped`, ephemeral: true})
+    await interaction.reply({ content: `Stopping song`})
 }
 
 /**
@@ -149,7 +149,7 @@ async function stop(interaction, client) {
  */
 async function skip(interaction, client) {
     client.DisTube.skip(interaction)
-    await interaction.reply({ content: `Skipped`, ephemeral: true})
+    await interaction.reply({ content: `Skipping song`})
 }
 
 /**
@@ -159,7 +159,7 @@ async function skip(interaction, client) {
  */
 async function previous(interaction, client) {
     client.DisTube.previous(interaction)
-    await interaction.reply({ content: `Skipped`, ephemeral: true})
+    await interaction.reply({ content: `Playing previous song`, ephemeral: true})
 }
 
 /**
@@ -190,7 +190,7 @@ async function queue(interaction, client) {
  */
 async function clear(interaction, client) {
     client.DisTube.clearQueue(interaction)
-    await interaction.reply({ content: `Queue cleared`, ephemeral: true})
+    await interaction.reply({ content: `Clearing queue`})
 }
 
 /**
@@ -232,7 +232,7 @@ async function loopqueue(interaction, client) {
  */
 async function unloop(interaction, client) {
     client.DisTube.setRepeatMode(interaction, 0)
-    await interaction.reply({ content: `Unlooping queue`, ephemeral: true})
+    await interaction.reply({ content: `Unlooping queue`})
 }
 
 /**
@@ -243,7 +243,7 @@ async function unloop(interaction, client) {
 async function volume(interaction, client) {
     const volume = interaction.options.getInteger('volume')
     client.DisTube.setVolume(interaction, volume)
-    await interaction.reply({ content: `Volume set to ${volume}`, ephemeral: true})
+    await interaction.reply({ content: `Volume set to ${volume}`})
 }
 
 /**
@@ -254,7 +254,7 @@ async function volume(interaction, client) {
 async function remove(interaction, client) {
     const index = interaction.options.getInteger('deleteindex')
     client.DisTube.removeSong(interaction, index)
-    await interaction.reply({ content: `Removed song at index ${index}`, ephemeral: true})
+    await interaction.reply({ content: `Removed song at index ${index}`})
 }
 
 /**
@@ -269,7 +269,7 @@ async function playrandom(interaction, client) {
         member: interaction.member,
         interaction
     })
-    await interaction.reply({ content: `Added random music to queue`, ephemeral: true})
+    await interaction.reply({ content: `Added random music to queue`})
 }
 
 /**
