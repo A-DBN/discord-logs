@@ -36,7 +36,7 @@ client.DisTube.on("addList", (queue, playlist) => {
         .setImage(playlist.thumbnail)
         .setTimestamp()
     interactionQueue.delete(interaction.id);
-    return interaction.reply({embeds: [embed]});
+    return interaction.editReply({embeds: [embed]});
 })
 
 client.DisTube.on("addSong", (queue, song) => {
@@ -53,7 +53,7 @@ client.DisTube.on("addSong", (queue, song) => {
         )
         .setTimestamp()
     interactionQueue.delete(interaction.id);
-    return interaction.reply({embeds: [embed]});
+    return interaction.editReply({embeds: [embed]});
 })
 
 /**
@@ -63,6 +63,7 @@ client.DisTube.on("addSong", (queue, song) => {
  */
 async function play(interaction, client) {
     const link = interaction.options.getString('link')
+    interaction.deferReply();
     interactionQueue.set(interaction.id, interaction);
     client.DisTube.play(interaction.member.voice.channel, link, {
         textChannel: interaction.channel,
