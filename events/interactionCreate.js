@@ -3,9 +3,10 @@ const { Events, InteractionType } = require('discord.js');
 const env = require ('dotenv').config()
 const _ = require('lodash')
 const { updateEmbed } = require('../utils/team.js');
+const {skip, previous, stop, loop, queue, loopqueue} = require('../music/commands.js')
 const axios = require('axios')
 
-function handleButton(interaction) {
+function handleRoleButton(interaction) {
     const roleName = interaction.customId;
     const role = interaction.guild.roles.cache.find(role => role.name === roleName);
 
@@ -139,6 +140,45 @@ async function linkTwitch(interaction) {
     }
 }
 
+function handleMusicButton(interaction) {
+    const command = interaction.customId;
+    switch (command) {
+        case 'stop':
+            stop(interaction, client)
+            break;
+        case 'skip':
+            skip(interaction, client)
+            break;
+        case 'previous':
+            previous(interaction, client)
+            break
+        case 'queue':
+            queue(interaction, client)
+            break
+        case 'loop':
+            loop(interaction, client)
+            break
+        case 'loopqueue':
+            loopqueue(interaction, client)
+            break
+    }
+}
+
+async function handleButtons(interaction) {
+    if (interaction.channelId === '980471046815772717') {
+        handleRoleButton(interaction)
+    } else if (interaction.commandName === 'fivestack') {
+        try {
+            handleFiveStack(interaction)
+        } catch (error) {
+            interaction.message.delete()
+            interaction.reply({ content: 'Une erreur est survenue, l\'intéraction a donc été supprimée', ephemeral: true });
+        }
+    } else {
+        handleMusicButton(interaction)
+    }
+}
+
 module.exports = {
     name: Events.InteractionCreate,
     on: true,
@@ -146,16 +186,7 @@ module.exports = {
         if (interaction.isChatInputCommand()) {
             await handleChatInputCommand(interaction)
         } else if (interaction.isButton()) {
-            if (interaction.channelId === '980471046815772717') {
-                handleButton(interaction)
-            } else if (interaction.commandName === 'fivestack') {
-                try {
-                    handleFiveStack(interaction)
-                } catch (error) {
-                    interaction.message.delete()
-                    interaction.reply({ content: 'Une erreur est survenue, l\'intéraction a donc été supprimée', ephemeral: true });
-                }
-            }
+            await handleButtons(interaction)
         } else if (interaction.isAutocomplete()){
             await handleAutoComplete(interaction)
         } else if (interaction.isModalSubmit()) {

@@ -1,10 +1,49 @@
-const {EmbedBuilder} = require('@discordjs/builders')
+const {EmbedBuilder, ButtonBuilder} = require('@discordjs/builders')
+const {ActionRowBuilder, ButtonStyle} = require('discord.js')
 const {setColor} = require('../utils/utils.js');
 
 const interactionQueue = new Map();
 
 client.DisTube.on("playSong", (queue, song) => {
-    const embed = new EmbedBuilder()
+
+    const skipButton = new ButtonBuilder()
+        .setCustomId('skip')
+        .setLabel('Skip')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji({name: '⏭️'})
+    const stopButton = new ButtonBuilder()
+        .setCustomId('stop')
+        .setLabel('Stop')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji({name:'⛔'})
+    const previousButton = new ButtonBuilder()
+        .setCustomId('previous')
+        .setLabel('Previous')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji({name:'⏮'})
+    const loopButton = new ButtonBuilder()
+        .setCustomId('loop')
+        .setLabel('Loop')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji({name:'🔁'})
+    const queueButton = new ButtonBuilder()
+        .setCustomId('queue')
+        .setLabel('Queue')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji({name:'📜'})
+    const loopQueueButton = new ButtonBuilder()
+        .setCustomId('loopqueue')
+        .setLabel('Loop Queue')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji({name:'🔁'})
+
+    const buttonRow1 = new ActionRowBuilder()
+        .addComponents([previousButton, stopButton, skipButton])
+    
+    const buttonRow2 = new ActionRowBuilder()
+        .addComponents([loopButton, queueButton, loopQueueButton])
+
+        const embed = new EmbedBuilder()
         .setTitle(`Playing ${song.name}`)
         .setURL(song.url)
         .setAuthor({name: song.user.username, iconURL:song.user.displayAvatarURL()})
@@ -15,7 +54,7 @@ client.DisTube.on("playSong", (queue, song) => {
         .setImage(song.thumbnail)
         .setColor(setColor())
         .setTimestamp()
-    queue.textChannel.send({embeds: [embed]});
+    queue.textChannel.send({embeds: [embed], components: [buttonRow1, buttonRow2]});
 })
 
 client.DisTube.on("error", (channel, error) => {
@@ -114,6 +153,16 @@ async function skip(interaction, client) {
 }
 
 /**
+ *  Play previous music
+ * @param {Interaction} interaction 
+ * @param {Client} client 
+ */
+async function previous(interaction, client) {
+    client.DisTube.previous(interaction)
+    await interaction.reply({ content: `Skipped`, ephemeral: true})
+}
+
+/**
  *  Show the queue
  * @param {Interaction} interaction 
  * @param {Client} client 
@@ -131,7 +180,7 @@ async function queue(interaction, client) {
             value: queue.songs.slice(1, 15).map((song, id) => `**${id + 1}**. ${song.name} - \`${song.formattedDuration}\``).join('\n'),
             inline: false
         });
-    await interaction.reply({ embeds: [embed], ephemeral: true});
+    await interaction.reply({ embeds: [embed]});
 }
 
 /**
@@ -150,8 +199,30 @@ async function clear(interaction, client) {
  * @param {Client} client 
  */
 async function loop(interaction, client) {
-    client.DisTube.setRepeatMode(interaction, 1)
-    await interaction.reply({ content: `Looping queue`, ephemeral: true})
+    const queue = client.DisTube.getQueue(interaction);
+    if (queue.repeatMode === 1) {
+        client.DisTube.setRepeatMode(interaction, 0)
+        return await interaction.reply({ content: `Unlooping Song`})
+    } else {
+        client.DisTube.setRepeatMode(interaction, 1)
+        await interaction.reply({ content: `Looping Song`})
+    }
+}
+
+/**
+ *  Loop the queue
+ * @param {Interaction} interaction 
+ * @param {Client} client 
+ */
+async function loopqueue(interaction, client) {
+    const queue = client.DisTube.getQueue(interaction);
+    if (queue.repeatMode === 2) {
+        client.DisTube.setRepeatMode(interaction, 0)
+        return await interaction.reply({ content: `Unlooping Queue`})
+    } else {
+        client.DisTube.setRepeatMode(interaction, 2)
+        await interaction.reply({ content: `Looping Queue`})
+    }
 }
 
 /**
@@ -217,7 +288,9 @@ module.exports = {
     resume,
     stop,
     skip,
+    previous,
     queue,
+    loopqueue,
     clear,
     loop,
     unloop,
