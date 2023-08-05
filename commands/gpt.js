@@ -28,9 +28,10 @@ module.exports = {
             .setDescription('Interact with an AI')
             .addStringOption(option => option.setName('text').setDescription('Ta question ?').setRequired(true)),
         execute: async (interaction) => {
+            await interaction.deferReply()
             const question = interaction.options.getString('text')
             const res = await makeGPTRequest(question)
-            if (res === null) return interaction.reply({ content: 'Limite mensuelle atteinte', ephemeral: true })
-            interaction.reply({ content: res })
+            if (res === null) return interaction.editReply({ content: 'Limite mensuelle atteinte', ephemeral: true })
+            interaction.editReply({ content: res })
           }
 }
