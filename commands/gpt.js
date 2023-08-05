@@ -32,6 +32,6 @@ module.exports = {
             const question = interaction.options.getString('text')
             const res = await makeGPTRequest(question)
             if (res === null) return interaction.editReply({ content: 'Limite mensuelle atteinte', ephemeral: true })
-            interaction.editReply({ content: res })
+            interaction.editReply({ content: `Question: ${question}\n\n${res}`})
           }
 }
