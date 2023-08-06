@@ -343,7 +343,6 @@ async function playrandom(interaction, client) {
         member: interaction.member,
         interaction
     })
-    await interaction.editReply({ content: `Added random music to queue`})
 }
 
 /**
