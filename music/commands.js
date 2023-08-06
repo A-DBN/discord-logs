@@ -1,6 +1,7 @@
 const {EmbedBuilder, ButtonBuilder} = require('@discordjs/builders')
 const {ActionRowBuilder, ButtonStyle} = require('discord.js')
 const {setColor} = require('../utils/utils.js');
+const {getLyrics} = require('genius-lyrics-api');
 
 const interactionQueue = new Map();
 
@@ -95,6 +96,31 @@ client.DisTube.on("addSong", (queue, song) => {
     return interaction.editReply({embeds: [embed]});
 })
 
+async function lyrics(interaction, client) {
+    const artist = interaction.options.getString('artist');
+    const title = interaction.options.getString('title');
+    const options = {
+        apiKey: "pDplYywDwEIg1yo6PG-bS82ixm_PLGyUV2zn6aTGsuI8pZzkX6aS7IIrbKya_22F",
+        artist: artist,
+        title: title,
+        optimizeQuery: true
+    }
+    console.log(options)
+    return getLyrics(options).then((lyrics) => {
+        // console.log(lyrics)
+        if (!lyrics) return interaction.reply({content: 'No lyrics found', ephemeral: true})
+        const embed = new EmbedBuilder()
+            .setTitle(`Lyrics for ${title}`)
+            .setAuthor({name: interaction.user.username, iconURL:interaction.user.displayAvatarURL()})
+            .setColor(setColor())
+            .setTimestamp()
+        return interaction.reply({embeds: [embed]})
+    }).catch((err) => {
+        console.log(err)
+        interaction.reply({content: 'No lyrics found', ephemeral: true})
+    })
+}
+
 /**
  * Play the music given, can be either a link or a name (Youtube only)
  * @param {Interaction} interaction 
@@ -104,11 +130,17 @@ async function play(interaction, client) {
     const link = interaction.options.getString('link')
     interaction.deferReply();
     interactionQueue.set(interaction.id, interaction);
-    client.DisTube.play(interaction.member.voice.channel, link, {
-        textChannel: interaction.channel,
-        member: interaction.member,
-        interaction
-    })
+    try {
+        client.DisTube.play(interaction.member.voice.channel, link, {
+            textChannel: interaction.channel,
+            member: interaction.member,
+            interaction
+        })
+    } catch (err) {
+        console.log(err)
+        interactionQueue.delete(interaction.id);
+        interaction.editReply({content: 'Error playing song', ephemeral: true})
+    }
 }
 
 
@@ -118,8 +150,12 @@ async function play(interaction, client) {
  * @param {Client} client 
  */
 async function pause(interaction, client) {
-    client.DisTube.pause(interaction)
-    await interaction.reply({ content: `Paused`, ephemeral: true})
+    try {
+        client.DisTube.pause(interaction)
+        await interaction.reply({ content: `Paused`, ephemeral: true})
+    } catch (err) {
+        await interaction.reply({ content: `No song to pause`, ephemeral: true})
+    }
 }
 
 /**
@@ -128,8 +164,12 @@ async function pause(interaction, client) {
  * @param {Client} client 
  */
 async function resume(interaction, client) {
-    client.DisTube.resume(interaction)
-    await interaction.reply({ content: `Resuming song`})
+    try {
+        client.DisTube.resume(interaction)
+        await interaction.reply({ content: `Resuming song`})
+    } catch (err) {
+        await interaction.reply({ content: `No song to resume`, ephemeral: true})
+    }
 }
 
 /**
@@ -138,8 +178,12 @@ async function resume(interaction, client) {
  * @param {Client} client 
  */
 async function stop(interaction, client) {
-    client.DisTube.stop(interaction)
-    await interaction.reply({ content: `Stopping song`})
+    try {
+        client.DisTube.stop(interaction)
+        await interaction.reply({ content: `Stopping song`})
+    } catch (err) {
+        await interaction.reply({ content: `No song to stop`, ephemeral: true})
+    }
 }
 
 /**
@@ -148,8 +192,12 @@ async function stop(interaction, client) {
  * @param {Client} client 
  */
 async function skip(interaction, client) {
-    client.DisTube.skip(interaction)
-    await interaction.reply({ content: `Skipping song`})
+    try {
+        client.DisTube.skip(interaction)
+        await interaction.reply({ content: `Skipping song`})
+    } catch (err) {
+        await interaction.reply({ content: `No song to skip`, ephemeral: true})
+    }
 }
 
 /**
@@ -158,8 +206,12 @@ async function skip(interaction, client) {
  * @param {Client} client 
  */
 async function previous(interaction, client) {
-    client.DisTube.previous(interaction)
-    await interaction.reply({ content: `Playing previous song`, ephemeral: true})
+    try {
+        client.DisTube.previous(interaction)
+        await interaction.reply({ content: `Playing previous song`, ephemeral: true})
+    } catch (err) {
+        await interaction.reply({ content: `No previous song`, ephemeral: true})
+    }
 }
 
 /**
@@ -189,8 +241,12 @@ async function queue(interaction, client) {
  * @param {Client} client 
  */
 async function clear(interaction, client) {
-    client.DisTube.clearQueue(interaction)
-    await interaction.reply({ content: `Clearing queue`})
+    try {
+        client.DisTube.clearQueue(interaction)
+        await interaction.reply({ content: `Clearing queue`})
+    } catch (err) {
+        await interaction.reply({ content: `No queue`, ephemeral: true})
+    }
 }
 
 /**
@@ -200,12 +256,16 @@ async function clear(interaction, client) {
  */
 async function loop(interaction, client) {
     const queue = client.DisTube.getQueue(interaction);
-    if (queue.repeatMode === 1) {
-        client.DisTube.setRepeatMode(interaction, 0)
-        return await interaction.reply({ content: `Unlooping Song`})
-    } else {
-        client.DisTube.setRepeatMode(interaction, 1)
-        await interaction.reply({ content: `Looping Song`})
+    try {
+        if (queue.repeatMode === 1) {
+            client.DisTube.setRepeatMode(interaction, 0)
+            return await interaction.reply({ content: `Unlooping Song`})
+        } else {
+            client.DisTube.setRepeatMode(interaction, 1)
+            await interaction.reply({ content: `Looping Song`})
+        }
+    } catch (err) {
+        await interaction.reply({ content: `No queue`, ephemeral: true})
     }
 }
 
@@ -216,12 +276,16 @@ async function loop(interaction, client) {
  */
 async function loopqueue(interaction, client) {
     const queue = client.DisTube.getQueue(interaction);
-    if (queue.repeatMode === 2) {
-        client.DisTube.setRepeatMode(interaction, 0)
-        return await interaction.reply({ content: `Unlooping Queue`})
-    } else {
-        client.DisTube.setRepeatMode(interaction, 2)
-        await interaction.reply({ content: `Looping Queue`})
+    try {
+        if (queue.repeatMode === 2) {
+            client.DisTube.setRepeatMode(interaction, 0)
+            return await interaction.reply({ content: `Unlooping Queue`})
+        } else {
+            client.DisTube.setRepeatMode(interaction, 2)
+            await interaction.reply({ content: `Looping Queue`})
+        }
+    } catch (err) {
+        await interaction.reply({ content: `No queue`, ephemeral: true})
     }
 }
 
@@ -241,9 +305,13 @@ async function unloop(interaction, client) {
  * @param {Client} client 
  */
 async function volume(interaction, client) {
-    const volume = interaction.options.getInteger('volume')
-    client.DisTube.setVolume(interaction, volume)
-    await interaction.reply({ content: `Volume set to ${volume}`})
+    try {
+        const volume = interaction.options.getInteger('volume')
+        client.DisTube.setVolume(interaction, volume)
+        await interaction.reply({ content: `Volume set to ${volume}`})
+    } catch (err) {
+        await interaction.reply({ content: `Volume must be between 0 and 100`, ephemeral: true})
+    }
 }
 
 /**
@@ -253,8 +321,12 @@ async function volume(interaction, client) {
  */
 async function remove(interaction, client) {
     const index = interaction.options.getInteger('deleteindex')
-    client.DisTube.removeSong(interaction, index)
-    await interaction.reply({ content: `Removed song at index ${index}`})
+    try {
+        client.DisTube.removeSong(interaction, index)
+        await interaction.reply({ content: `Removed song at index ${index}`})
+    } catch (err) {
+        await interaction.reply({ content: `No song at index ${index}`, ephemeral: true})
+    }
 }
 
 /**
@@ -264,6 +336,8 @@ async function remove(interaction, client) {
  */
 async function playrandom(interaction, client) {
     const link = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley'
+    interaction.deferReply();
+    interactionQueue.set(interaction.id, interaction);
     client.DisTube.play(interaction.member.voice.channel, link, {
         textChannel: interaction.channel,
         member: interaction.member,
@@ -297,5 +371,6 @@ module.exports = {
     volume,
     remove,
     playrandom,
-    shuffle
+    shuffle,
+    lyrics
 }
