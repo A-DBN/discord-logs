@@ -7,6 +7,7 @@ const {isLive} = require('./utils/twitchAlert.js')
 const {getObject} = require('./utils/utils.js')
 const {updateTwitterInfo, updateInstagramInfo, updateTwitchInfo, updateTikTokInfo, updateSpotifyInfo } = require('./networks.js');
 const {DisTube} = require('distube')
+const {SpotifyPlugin} = require('@distube/spotify')
 
 // Create a new client instance
 const client = new Client({ 
@@ -29,7 +30,16 @@ const client = new Client({
 	}
 });
 
-client.DisTube = new DisTube(client, {emitNewSongOnly: true, leaveOnFinish: true, leaveOnEmpty: true, leaveOnStop: true })
+client.DisTube = new DisTube(client, {emitNewSongOnly: true, leaveOnFinish: true, leaveOnEmpty: true, leaveOnStop: true, plugins: [new SpotifyPlugin(
+	{
+		api: {
+			clientId: process.env.SPOTIFY_CLIENT_ID,
+			clientSecret:process.env.SPOTIFY_CLIENT_SECRET,
+		},
+		parallel: true,
+		emitEventsAfterFetching: true,
+	}
+)]})
 
 //make client global
 global.client = client;
