@@ -67,21 +67,21 @@ async function global(interaction, data) {
       .setImage(displayImage)
       .setColor(setColor())
 
+    const statsButton = new ButtonBuilder()
+      .setCustomId('stats')
+      .setLabel('Stats')
+      .setStyle(ButtonStyle.Primary)
+    const shopButton = new ButtonBuilder()
+      .setCustomId('shop')
+      .setLabel('Shop')
+      .setStyle(ButtonStyle.Secondary)
+    const skinsButton = new ButtonBuilder()
+      .setCustomId('skins')
+      .setLabel('Skins')
+      .setStyle(ButtonStyle.Success)
+
     const actionRow = new ActionRowBuilder()
-      .addComponents(
-        new ButtonBuilder()
-          .setCustomId('stats')
-          .setLabel('Stats')
-          .setStyle(ButtonStyle.Primary),
-        new ButtonBuilder()
-          .setCustomId('shop')
-          .setLabel('Shop')
-          .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-          .setCustomId('skins')
-          .setLabel('Skins')
-          .setStyle(ButtonStyle.Success)
-      );
+    weapon === "Melee" ? actionRow.addComponents([statsButton, skinsButton]) : actionRow.addComponents([statsButton, shopButton, skinsButton]);
 
     interaction.editReply({ embeds: [embed], components: [actionRow] })
       .then((message) => {
@@ -114,13 +114,13 @@ async function global(interaction, data) {
                         )
                 break;
                 case 'skins':
-                embed.setDescription('Skins Page');
-                embed.addFields(
-                    {
-                        name: 'Skins',
-                        value: skins.map(skin => skin.displayName).join('\n'),
-                    }
-                )
+                embed.setDescription('Skins Page\n' + skins.map(skin => skin.displayName).join('\n'));
+                // embed.addFields(
+                //     {
+                //         name: 'Skins',
+                //         value: skins.map(skin => skin.displayName).join('\n'),
+                //     }
+                // )
                 break;
             }
             buttonInteraction.update({ embeds: [embed]});
@@ -139,7 +139,6 @@ async function showSkin(interaction, data) {
     const name = interaction.options.getString('nom');
     const skins = data.map(w => w.skins).flat().filter(s => s.displayName === name);
     const chromas = skins.map(s => s.chromas).flat();
-    console.log(chromas.length)
     if (chromas.length === 1) {
         const embed = new EmbedBuilder()
             .setTitle(name)
@@ -183,7 +182,7 @@ module.exports = {
             ),
         autocomplete: async (interaction) => {
             const focusedValue = interaction.options.getFocused(true);
-            const choices = ["Odin", "Ares", 'Vandal', "Bulldog", "Guardian", "Phantom", "Spectre", "Stinger", "Marshal", "Operator", "Shorty", "Frenzy", "Ghost", "Sheriff", "Bucky", "Judge", "Classic", "Knife"];
+            const choices = ["Odin", "Ares", 'Vandal', "Bulldog", "Guardian", "Phantom", "Spectre", "Stinger", "Marshal", "Operator", "Shorty", "Frenzy", "Ghost", "Sheriff", "Bucky", "Judge", "Classic", "Melee"];
             const filtered = choices.filter(choice => choice.startsWith(focusedValue.value));
             await interaction.respond(filtered.map(choice => ({ name: choice, value: choice })));
         },
