@@ -80,8 +80,10 @@ async function global(interaction, data) {
       .setLabel('Skins')
       .setStyle(ButtonStyle.Success)
 
+      console.log(weaponData)
+
     const actionRow = new ActionRowBuilder()
-    weapon === "Melee" ? actionRow.addComponents([statsButton, skinsButton]) : actionRow.addComponents([statsButton, shopButton, skinsButton]);
+    weapon === "Melee" ? actionRow.addComponents([skinsButton]) : actionRow.addComponents([statsButton, shopButton, skinsButton]);
 
     interaction.editReply({ embeds: [embed], components: [actionRow] })
       .then((message) => {
