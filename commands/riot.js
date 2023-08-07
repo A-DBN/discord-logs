@@ -138,7 +138,18 @@ async function showSkin(interaction, data) {
     await interaction.deferReply();
     const name = interaction.options.getString('nom');
     const skins = data.map(w => w.skins).flat().filter(s => s.displayName === name);
-    const chromas = skins.map(s => s.chromas).flat().slice(1);
+    const chromas = skins.map(s => s.chromas).flat();
+    console.log(chromas.length)
+    if (chromas.length === 1) {
+        const embed = new EmbedBuilder()
+            .setTitle(name)
+            .setColor(setColor())
+            .addFields({name: 'Default Skin', value: skins[0].displayName, inline: false})
+            .setImage(skins[0].displayIcon)
+            .setTimestamp()
+            .setFooter({text: 'No chroma found for this skin'})
+        return await interaction.editReply({ embeds: [embed] });
+    }
     const images = chromas.map(c => c.fullRender);
     if (chromas.length === 0 || images.length === 0) return await interaction.editReply({ content: 'Aucun Chroma trouvé. Pour obtenir la liste des skins d\'une arme /valorant arme puis menu Skins' });
     const image = await createImageGrid(images);
