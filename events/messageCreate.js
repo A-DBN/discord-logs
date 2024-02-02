@@ -1,11 +1,18 @@
 const env = require('dotenv').config();
 const { createCanvas, loadImage } = require('canvas');
 
+function check_tag(message) {
+  const mentions = message.mentions.users;
+  if (mentions.size === 0) return false;
+  mentions.some((user) => user.id === '927672705375928350') ? message.reply('Ouais c\'est Greg') : null;
+}
+
 module.exports = {
   name: 'messageCreate',
   on: true,
   async execute(message) {
     if (message.author.bot) return;
+    check_tag(message);
     if (message.content.startsWith('!maso')) {
       message.delete()
       message.channel.send({files: ["./assets/maso.mp4"]})
