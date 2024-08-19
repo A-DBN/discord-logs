@@ -49,7 +49,6 @@ export default new Event({
             client.saveData();
         } catch (error) {
             console.error(error);
-            console.log(embed);
         }
     },
 });

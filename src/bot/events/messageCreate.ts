@@ -6,7 +6,12 @@ export default new Event({
     run: async (client, message) => {
         if (message.author.bot) return;
         const result = checkWordsinArray(client, message.content);
-        if (result)
-            message.channel.send({ content: result.message ? result.message : " ", files: [result.attachment] });
+        if (result) {
+            const msg = {
+                content: result.message ? result.message : " ",
+                files: result.attachment ? [result.attachment] : [],
+            };
+            message.channel.send(msg);
+        }
     },
 });

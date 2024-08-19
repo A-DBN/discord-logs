@@ -10,7 +10,7 @@ async function handleAutoComplete(client: CustomClient, interaction: Autocomplet
     if (!command) return;
 
     try {
-        await command.autocomplete?.(interaction as AutocompleteInteraction);
+        await command.autocomplete?.(client, interaction as AutocompleteInteraction);
     } catch (error) {
         console.error(`An error occurred in '${command.builder.name}' command.\n${error}\n`);
     }

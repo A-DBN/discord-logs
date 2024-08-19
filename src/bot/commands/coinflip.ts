@@ -4,15 +4,15 @@ import { createCanvas } from "canvas";
 
 export default new Command({
     builder: new SlashCommandBuilder()
-    .setName("coinflip")
-    .setDescription("Joue au pile ou face")
-    .addStringOption(option =>
-        option
-            .setName("side")
-            .setDescription("Pile ou Face")
-            .setRequired(true)
-            .addChoices({ name: "Pile", value: "Pile" }, { name: "Face", value: "Face" })
-    ) as SlashCommandBuilder,
+        .setName("coinflip")
+        .setDescription("Joue au pile ou face")
+        .addStringOption(option =>
+            option
+                .setName("side")
+                .setDescription("Pile ou Face")
+                .setRequired(true)
+                .addChoices({ name: "Pile", value: "Pile" }, { name: "Face", value: "Face" })
+        ) as SlashCommandBuilder,
     run: async ({ client, interaction }) => {
         const sides = ["Pile", "Face"];
         const randomSide = sides[Math.floor(Math.random() * sides.length)];
@@ -33,10 +33,13 @@ export default new Command({
 
         const attachment = canvas.toBuffer();
         return randomSide !== userSide
-            ? interaction.editReply({ content: "Côté séléctionné: " + userSide + `\nRésultat: Perdu`, files: [attachment] })
+            ? interaction.editReply({
+                  content: "Côté séléctionné: " + userSide + `\nRésultat: Perdu`,
+                  files: [attachment],
+              })
             : interaction.editReply({
-                content: "Côté séléctionné: " + userSide + `\nRésultat: Gagné`,
-                files: [attachment],
-            });
-    }
+                  content: "Côté séléctionné: " + userSide + `\nRésultat: Gagné`,
+                  files: [attachment],
+              });
+    },
 });

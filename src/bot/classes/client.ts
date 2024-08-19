@@ -116,10 +116,10 @@ export default class CustomClient extends Client {
 
     initData() {
         const data = JSON.parse(readFileSync("./data/stockage.json", "utf-8"));
-        this.twitchToken = data.twitchToken;
-        this.twitchTokenExpiration = data.twitchTokenExpiration;
+        this.twitchToken = data.twitchToken || "";
+        this.twitchTokenExpiration = data.twitchTokenExpiration || 0;
         this.isLive = data.isLive || false;
-        this.tweetId = data.tweetId;
+        this.tweetId = data.tweetId || "";
         this.reactions = new Collection(data.reactions);
     }
 }
