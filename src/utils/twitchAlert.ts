@@ -80,8 +80,7 @@ function sendTweet(client: CustomClient, title: string) {
     const headers = setupRequest(requestData);
 
     const data = JSON.stringify({
-        // text: ` ${title} ! https://twitch.tv/AreiTTV`,
-        text: "Test API",
+        text: ` ${title} ! https://twitch.tv/AreiTTV`,
     });
 
     const config = {
@@ -132,7 +131,6 @@ function sendTwitchLiveMessage(client: CustomClient, streamData: StreamData) {
                     const image =
                         streamData.thumbnail_url.replace("{width}", "1280").replace("{height}", "720") +
                         `?cachebuster=${Date.now()}`;
-
                     const embed = new EmbedBuilder()
                         .setColor(Number(0x6441a4))
                         .setAuthor({
@@ -148,7 +146,7 @@ function sendTwitchLiveMessage(client: CustomClient, streamData: StreamData) {
                             { name: "Viewers", value: String(streamData.viewer_count), inline: true }
                         )
                         .setImage(image)
-                        .setFooter({ text: "Twitch", iconURL: "https://i.imgur.com/rQo24gB.png" })
+                        .setFooter({ text: "Twitch", iconURL: "https://i.imgur.com/HSCsk7C.png" })
                         .setTimestamp();
                     client.chans.get("twitch")?.send({
                         content: `@everyone areittv est en ligne par ici -> https://twitch.tv/areittv`,

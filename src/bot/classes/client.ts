@@ -105,8 +105,6 @@ export default class CustomClient extends Client {
         console.log("Saving data...");
         const data = {
             reactions: [...this.reactions.entries()],
-            twitchToken: this.twitchToken,
-            twitchTokenExpiration: this.twitchTokenExpiration,
             isLive: this.isLive,
             tweetId: this.tweetId,
         };
@@ -116,8 +114,8 @@ export default class CustomClient extends Client {
 
     initData() {
         const data = JSON.parse(readFileSync("./data/stockage.json", "utf-8"));
-        this.twitchToken = data.twitchToken || "";
-        this.twitchTokenExpiration = data.twitchTokenExpiration || 0;
+        this.twitchToken = "";
+        this.twitchTokenExpiration = 0;
         this.isLive = data.isLive || false;
         this.tweetId = data.tweetId || "";
         this.reactions = new Collection(data.reactions);
