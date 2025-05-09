@@ -2,7 +2,7 @@ import { Event } from "../classes/events";
 import { EmbedBuilder } from "discord.js";
 
 export default new Event({
-    name: "guildMemberRemove",
+    name: "guildBanRemove",
     run: async (client, ban) => {
         const embed = new EmbedBuilder()
             .setTitle("Member Unbanned")
